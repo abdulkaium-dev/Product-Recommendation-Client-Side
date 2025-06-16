@@ -44,7 +44,7 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#c6a1a5] to-[#b98b7b] p-6">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-tr from-[#2b1f5c] via-[#c62861] to-[#e44d26]  p-6">
       <div className="bg-white rounded-3xl shadow-lg overflow-hidden w-full max-w-5xl grid grid-cols-1 md:grid-cols-2">
         
         {/* Left - Form Section */}

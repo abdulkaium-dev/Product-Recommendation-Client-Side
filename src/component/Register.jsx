@@ -1,19 +1,19 @@
 import { FiEye, FiEyeOff } from 'react-icons/fi';
-import React, { use, useState } from "react";
+import React, { useState, useContext } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { FcGoogle } from 'react-icons/fc';
 import { AuthContext } from "./AuthProvider";
 import { toast } from "react-toastify";
 
 const Register = () => {
-  const navigate = useNavigate()
-  const location = useLocation()
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { createUser, createUserWithGoogle, updateUser } = useContext(AuthContext);
 
-  const { createUser, createUserWithGoogle, updateUser } = use(AuthContext)
-  //   password show
-  const [showPassword, setShowPassword, setUser] = useState(false);
-
+  const [showPassword, setShowPassword] = useState(false);
   const togglePassword = () => setShowPassword(prev => !prev);
+
+  const [user, setUser] = useState(null);
 
   const RegisterSubmit = async (e) => {
     e.preventDefault();
@@ -21,8 +21,6 @@ const Register = () => {
     const email = e.target.email.value;
     const password = e.target.password.value;
     const photoUrl = e.target.photoUrl.value;
-
-
 
     // Password validation
     if (!/[A-Z]/.test(password)) {
@@ -43,80 +41,78 @@ const Register = () => {
         const currentUser = userCredential.user;
         updateUser({ displayName: name, photoURL: photoUrl })
           .then(() => {
-            setUser({ ...currentUser, displayName: name, photoURL: photoUrl })
-            navigate('/')
+            setUser({ ...currentUser, displayName: name, photoURL: photoUrl });
             toast.success("Account created successfully!");
-          }).catch((error) => {
-            console.log(error)
-            setUser(currentUser)
+            navigate('/');
+          })
+          .catch((error) => {
+            console.log(error);
+            setUser(currentUser);
           });
-
       })
       .catch((error) => {
-        const errorMessage = error.message;
-        toast.error(errorMessage || "Something went wrong.");
+        toast.error(error.message || "Something went wrong.");
       });
   };
-
-
 
   const handleGoogleLogin = () => {
     createUserWithGoogle()
       .then((result) => {
         const currentUser = result.user;
-        setUser(currentUser)
-        toast.success(`Welcome back ${currentUser.displayName}`)
-        navigate(`${location?.state ? location.state : '/'}`)
-      }).catch((error) => {
+        setUser(currentUser);
+        toast.success(`Welcome back ${currentUser.displayName}`);
+        navigate(location?.state || '/');
+      })
+      .catch((error) => {
         toast.error("Google login failed.");
-        console.log(error)
+        console.log(error);
       });
   };
 
   return (
-    <div className="register-form min-h-screen flex flex-col items-center justify-center p-4">
-      <h2 className="text-2xl font-bold mb-4">Register Please</h2>
-      <form className="flex flex-col space-y-4 w-full max-w-sm " onSubmit={RegisterSubmit}>
-        <input className="p-2 border rounded" type="text" name="name" placeholder="Name" required /> <br />
-        <input className="p-2 border rounded" type="email" name="email" placeholder="Email" required /> <br />
+    <div className="min-h-screen flex justify-center items-center bg-gradient-to-tr from-[#2b1f5c] via-[#c62861] to-[#e44d26] p-6">
+      <div className="w-full max-w-md bg-white rounded-xl shadow-md p-8 text-black">
+        <h2 className="text-2xl font-bold text-center mb-6">Register</h2>
 
-        {/* password */}
-        <div className="p-2 border rounded" style={{ position: 'relative', display: 'inline-block', width: '100%' }}>
-          <input
-            type={showPassword ? 'text' : 'password'}
-            name="password"
-            placeholder="Password"
-            required
-            style={{ paddingRight: '35px', width: '100%', height: '40px', fontSize: '16px' }}
-          />
-          <span
-            onClick={togglePassword}
-            style={{
-              position: 'absolute',
-              right: '10px',
-              top: '30px',
-              transform: 'translateY(-50%)',
-              cursor: 'pointer',
-              color: '#555'
-            }}
-          >
-            {showPassword ? <FiEyeOff size={20} /> : <FiEye size={20} />}
-          </span>
-        </div> <br />
-        <input className="p-2 border rounded" type="url" name="photoUrl" placeholder="Photo URL (Optional)" /> <br />
-        <button type="submit" className="submit  bg-red-500 text-white p-3 rounded-lg">Register</button> <br />
-        
-      </form>
-      <button
+        <form className="space-y-4" onSubmit={RegisterSubmit}>
+          <input className="w-full p-3 border rounded" type="text" name="name" placeholder="Name" required />
+          <input className="w-full p-3 border rounded" type="email" name="email" placeholder="Email" required />
+
+          <div className="relative">
+            <input
+              type={showPassword ? 'text' : 'password'}
+              name="password"
+              placeholder="Password"
+              required
+              className="w-full p-3 border rounded"
+            />
+            <span
+              onClick={togglePassword}
+              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-600 cursor-pointer"
+            >
+              {showPassword ? <FiEyeOff size={20} /> : <FiEye size={20} />}
+            </span>
+          </div>
+
+          <input className="w-full p-3 border rounded" type="url" name="photoUrl" placeholder="Photo URL (Optional)" />
+          <button type="submit" className="w-full bg-[#885a5c] hover:bg-[#6d4649] text-white py-3 rounded transition ">
+            Register
+          </button>
+        </form>
+
+        <button
           onClick={handleGoogleLogin}
-          className="mb-3 bg-white text-black border border-gray-300 p-2 rounded-lg flex items-center justify-center gap-2 shadow-md hover:shadow-lg transition"
+          className="mt-4 w-full bg-white text-black border p-2 rounded-lg flex items-center justify-center gap-2 shadow-md hover:shadow-lg transition"
         >
           <FcGoogle size={24} />
-          <span>Login with Google (Coming Soon)</span>
+          <span>Register with Google</span>
         </button>
-      <p>
-        Already have an account? <Link to="/login" className="text-blue-600 underline font-bold">Login here</Link>
-      </p>
+
+        <p className="mt-4 text-center">
+          Already have an account?{" "}
+          <Link to="/login" className="text-blue-600 font-bold underline">Login here</Link>
+        </p>
+      </div>
     </div>
   );
 };
