@@ -50,7 +50,7 @@ export default function Navbar() {
         className={({ isActive }) =>
           isActive
             ? "text-blue-600 font-semibold"
-            : "text-gray-600 hover:text-blue-600"
+            : "text-gray-700 hover:text-blue-600"
         }
       >
         {name}
@@ -60,7 +60,7 @@ export default function Navbar() {
   const UserAvatar = () => (
     <div
       title={user?.displayName || "User"}
-      className="w-10 h-10 rounded-full overflow-hidden border-2 border-indigo-600"
+      className="w-10 h-10 rounded-full overflow-hidden border-2 border-indigo-600 shrink-0"
     >
       <img
         src={user?.photoURL || "/default-avatar.png"}
@@ -71,19 +71,23 @@ export default function Navbar() {
   );
 
   return (
-    <nav className="bg-gradient-to-br from-green-50 to-blue-200 shadow-md mb-10">
+    <nav className="bg-gradient-to-br from-green-50 to-blue-200 shadow-md w-full overflow-x-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between h-16 items-center">
+        <div className="flex justify-between items-center h-16">
           {/* Logo & Title */}
-          <div className="flex items-center gap-2 text-2xl font-bold text-indigo-600 whitespace-nowrap">
-            <img src="https://miro.medium.com/v2/resize:fit:1000/1*zEcZkWeQKuu0Dek-HJkslw.png" alt="Logo" className="h-8 w-8" />
-            {text} <Cursor cursorStyle="|" />
+          <div className="flex items-center gap-2 text-xl md:text-2xl font-bold text-indigo-600 whitespace-nowrap overflow-hidden">
+            <img
+              src="https://miro.medium.com/v2/resize:fit:1000/1*zEcZkWeQKuu0Dek-HJkslw.png"
+              alt="Logo"
+              className="h-8 w-8 shrink-0"
+            />
+            <span className="truncate">{text}</span>
+            <Cursor cursorStyle="|" />
           </div>
 
           {/* Desktop Menu */}
           <div className="hidden md:flex gap-6 items-center">
             {renderLinks()}
-
             {user && (
               <div className="flex items-center gap-4">
                 <UserAvatar />
@@ -122,9 +126,8 @@ export default function Navbar() {
       {/* Mobile Menu */}
       {isOpen && (
         <div className="md:hidden px-4 pb-4">
-          <div className="flex flex-col space-y-2">
+          <div className="flex flex-col space-y-3">
             {renderLinks(true)}
-
             {user && (
               <>
                 <UserAvatar />
