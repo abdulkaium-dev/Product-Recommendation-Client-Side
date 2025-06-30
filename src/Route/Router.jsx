@@ -8,6 +8,10 @@ import WhyWeExistSlider from "../component/Slider";
 import MyQueriesPage from "../component/MyQueriesPage";
 import AddQuery from "../component/AddQuery";
 import Home from "../Home/Home";
+import QueryDetails from "../component/QueryDetails";
+import Queries from "../component/Queries";
+import Update from "../component/Update";
+import UpdateQuery from "../component/Update";
 
 const router = createBrowserRouter([
   {
@@ -38,9 +42,36 @@ const router = createBrowserRouter([
           </div>
         ),
       },
+          {
+        path: "queries",
+        Component: Queries,
+        hydrateFallbackElement: (
+          <div className="flex justify-center items-center mt-48 ">
+            <div className="w-12 h-12 border-4 border-dashed rounded-full animate-spin border-green-500"></div>
+          </div>
+        ),
+      },
          {
         path: "my-queries",
         Component: MyQueriesPage,
+        hydrateFallbackElement: (
+          <div className="flex justify-center items-center mt-48 ">
+            <div className="w-12 h-12 border-4 border-dashed rounded-full animate-spin border-green-500"></div>
+          </div>
+        ),
+      },
+         {
+        path :"/query/:id",
+        Component: QueryDetails,
+        hydrateFallbackElement: (
+          <div className="flex justify-center items-center mt-48 ">
+            <div className="w-12 h-12 border-4 border-dashed rounded-full animate-spin border-green-500"></div>
+          </div>
+        ),
+      },
+        {
+         path: "/update-query/:id",
+        Component: UpdateQuery,
         hydrateFallbackElement: (
           <div className="flex justify-center items-center mt-48 ">
             <div className="w-12 h-12 border-4 border-dashed rounded-full animate-spin border-green-500"></div>
