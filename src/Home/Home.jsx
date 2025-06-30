@@ -1,20 +1,17 @@
 import React from 'react';
-import Slider from '../component/Slider';
-import Features from '../component/Feature';
-import FreelancePlatforms from '../component/Freelancer';
-import Platforms from '../component/Platforms';
+import WhyWeExistSlider from '../component/Slider';
+import ImpactStats from '../component/ImpactStats'; 
+import WhyBoycottMatters from '../component/WhyBoycottMatters';
+import JoinTheMovement from '../component/JoinTheMovement';
+import Sams from '../component/sams';
 
 
 const Home = () => {
-   
-    return (
-        <div>
-  <h1>sams
-  </h1>
-        
-
-     </div>
-    );
+  return (
+    <main>
+      <WhyWeExistSlider />
+    </main>
+  );
 };
 
 export default Home;
