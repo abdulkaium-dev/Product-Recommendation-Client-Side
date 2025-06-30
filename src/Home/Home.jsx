@@ -11,6 +11,7 @@ const Home = () => {
     <main>
       <WhyWeExistSlider />
       <ImpactStats></ImpactStats>
+      <WhyBoycottMatters></WhyBoycottMatters>
     </main>
   );
 };
