@@ -10,6 +10,7 @@ const Home = () => {
   return (
     <main>
       <WhyWeExistSlider />
+      <ImpactStats></ImpactStats>
     </main>
   );
 };
