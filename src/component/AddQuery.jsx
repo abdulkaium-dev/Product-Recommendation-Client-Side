@@ -58,6 +58,7 @@ export default function AddQuery() {
           icon: "success",
           confirmButtonColor: "#22c55e",
         });
+
         // Reset form
         setFormData({
           productName: "",
