@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { getFirestore, collection, addDoc } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
+import Swal from "sweetalert2";
 
 export default function AddQuery() {
   const [formData, setFormData] = useState({
@@ -11,7 +11,6 @@ export default function AddQuery() {
     boycottingReason: "",
   });
 
-  const db = getFirestore();
   const auth = getAuth();
   const user = auth.currentUser;
 
@@ -22,44 +21,60 @@ export default function AddQuery() {
     }));
   };
 
-  const handleSubmit = async (e) => {
+  const handleAddTask = async (e) => {
     e.preventDefault();
 
-    const { productName, productBrand, productImageUrl, queryTitle, boycottingReason } = formData;
-
-    if (!productName || !productBrand || !productImageUrl || !queryTitle || !boycottingReason) {
-      alert("Please fill all fields.");
-      return;
-    }
-
     if (!user) {
-      alert("You must be logged in to submit a query.");
+      Swal.fire({
+        title: 'Please log in to submit a query!',
+        icon: 'warning',
+        confirmButtonColor: '#f59e0b',
+      });
       return;
     }
 
     const newQuery = {
       ...formData,
-      userEmail: user.email || "",
-      userName: user.displayName || "",
-      userProfileImage: user.photoURL || "",
-      createdAt: new Date().toISOString(),
+      email: user.email,
+      userName: user.displayName,
+      userImage: user.photoURL,
+      date: new Date().toISOString(),
       recommendationCount: 0,
     };
 
     try {
-      await addDoc(collection(db, "productQueries"), newQuery);
-      alert("Query submitted successfully!");
-
-      setFormData({
-        productName: "",
-        productBrand: "",
-        productImageUrl: "",
-        queryTitle: "",
-        boycottingReason: "",
+      const res = await fetch("http://localhost:3000/products", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newQuery),
       });
+
+      const data = await res.json();
+      if (data.insertedId || data.acknowledged) {
+        Swal.fire({
+          title: "Query Added Successfully!",
+          icon: "success",
+          confirmButtonColor: "#22c55e",
+        });
+        // Reset form
+        setFormData({
+          productName: "",
+          productBrand: "",
+          productImageUrl: "",
+          queryTitle: "",
+          boycottingReason: "",
+        });
+      }
     } catch (error) {
-      console.error("Error adding document: ", error);
-      alert("Failed to submit query. Please try again.");
+      console.error("Error adding query:", error);
+      Swal.fire({
+        title: "Failed to Add Query",
+        text: error.message,
+        icon: "error",
+        confirmButtonColor: "#ef4444",
+      });
     }
   };
 
@@ -68,7 +83,7 @@ export default function AddQuery() {
       <h2 className="text-4xl font-extrabold text-white text-center mb-10 drop-shadow-lg">
         Add Product Query
       </h2>
-      <form onSubmit={handleSubmit} className="space-y-8 bg-white rounded-xl p-8 shadow-lg">
+      <form onSubmit={handleAddTask} className="space-y-8 bg-white rounded-xl p-8 shadow-lg">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <label className="block">
             <span className="text-gray-700 font-semibold mb-2 block text-lg">Product Name</span>
@@ -79,6 +94,7 @@ export default function AddQuery() {
               onChange={handleChange}
               placeholder="Enter product name"
               className="w-full px-5 py-3 border-2 border-purple-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-purple-400 focus:border-transparent transition duration-300"
+              required
             />
           </label>
 
@@ -91,6 +107,7 @@ export default function AddQuery() {
               onChange={handleChange}
               placeholder="Enter product brand"
               className="w-full px-5 py-3 border-2 border-pink-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-pink-400 focus:border-transparent transition duration-300"
+              required
             />
           </label>
 
@@ -103,6 +120,7 @@ export default function AddQuery() {
               onChange={handleChange}
               placeholder="Enter product image URL"
               className="w-full px-5 py-3 border-2 border-red-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-red-400 focus:border-transparent transition duration-300"
+              required
             />
           </label>
 
@@ -115,6 +133,7 @@ export default function AddQuery() {
               onChange={handleChange}
               placeholder="Is there any better product that gives me the same quality?"
               className="w-full px-5 py-3 border-2 border-indigo-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-indigo-400 focus:border-transparent transition duration-300"
+              required
             />
           </label>
         </div>
@@ -128,6 +147,7 @@ export default function AddQuery() {
             placeholder="Explain why you don't want this product"
             rows={5}
             className="w-full px-5 py-3 border-2 border-green-300 rounded-xl resize-y focus:outline-none focus:ring-4 focus:ring-green-400 focus:border-transparent transition duration-300"
+            required
           />
         </label>
 
