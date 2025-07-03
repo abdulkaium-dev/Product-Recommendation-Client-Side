@@ -78,6 +78,10 @@ const router = createBrowserRouter([
           </div>
         ),
       },
+    {
+  path: "/query/:id",
+  element: <QueryDetails />
+},
            {
         path: "add-query",
         Component: AddQuery,

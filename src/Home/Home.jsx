@@ -1,19 +1,20 @@
 import React from 'react';
-import WhyWeExistSlider from '../component/Slider';
-import ImpactStats from '../component/ImpactStats';
+import HomeSlider from '../component/Slider';
+import FeaturesSection from '../component/FeaturesSection';
+import Testimonials from '../component/Testimonials';
 import WhyBoycottMatters from '../component/WhyBoycottMatters';
-import JoinTheMovement from '../component/JoinTheMovement';
+import ProductGrid from '../component/ProductGrid';
 
 const Home = () => {
   return (
     <main>
-      <WhyWeExistSlider />
-      <ImpactStats />
+      <HomeSlider />
+      <FeaturesSection />
+      <Testimonials />
       <WhyBoycottMatters />
-      <JoinTheMovement />
+      <ProductGrid></ProductGrid>
     </main>
   );
 };
 
 export default Home;
-

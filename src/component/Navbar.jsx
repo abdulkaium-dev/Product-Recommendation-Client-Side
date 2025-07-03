@@ -71,7 +71,7 @@ export default function Navbar() {
   );
 
   return (
-    <nav className="bg-gradient-to-br from-green-50 to-blue-200 shadow-md w-full overflow-x-hidden">
+    <nav className="bg-gradient-to-br from-green-50 to-blue-200 shadow-md w-full overflow-x-hidden mb-5">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo & Title */}

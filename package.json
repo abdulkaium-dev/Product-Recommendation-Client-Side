@@ -12,7 +12,7 @@
   "dependencies": {
     "@tailwindcss/vite": "^4.1.10",
     "firebase": "^11.9.1",
-    "framer-motion": "^12.18.1",
+    "framer-motion": "^12.23.0",
     "react": "^19.1.0",
     "react-countup": "^6.5.3",
     "react-dom": "^19.1.0",
@@ -24,6 +24,7 @@
     "react-toastify": "^11.0.5",
     "slick-carousel": "^1.8.1",
     "sweetalert2": "^11.22.2",
+    "swiper": "^11.2.10",
     "tailwindcss": "^4.1.10"
   },
   "devDependencies": {

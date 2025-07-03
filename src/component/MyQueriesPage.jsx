@@ -103,12 +103,12 @@ export default function MyQueries() {
                 Submitted: {new Date(query.date).toLocaleString()}
               </p>
               <div className="flex flex-wrap gap-2">
-                <button
-                  onClick={() => navigate(`/query/${query._id}`)}
-                  className="bg-indigo-500 text-white px-3 py-1 rounded hover:bg-indigo-600"
-                >
-                  View Details
-                </button>
+               <button
+  onClick={() => navigate(`/query/${query._id}`)}
+  className="bg-indigo-500 text-white px-3 py-1 rounded hover:bg-indigo-600"
+>
+  View Details
+</button>
                 <button
                   onClick={() => navigate(`/update-query/${query._id}`)}
                   className="bg-amber-500 text-white px-3 py-1 rounded hover:bg-amber-600"
