@@ -12,6 +12,9 @@ import QueryDetails from "../component/QueryDetails";
 import Queries from "../component/Queries";
 import Update from "../component/Update";
 import UpdateQuery from "../component/Update";
+import Recomendation from "../component/Recomendation";
+import MyRecommendation from "../component/MyRecomendation";
+import Recommendation from "../component/Recomendation";
 
 const router = createBrowserRouter([
   {
@@ -82,6 +85,15 @@ const router = createBrowserRouter([
   path: "/query/:id",
   element: <QueryDetails />
 },
+    {
+  path: "/my-recommendations",
+Component : MyRecommendation
+},
+    {
+  path: "/recommended",
+Component :Recommendation ,
+},
+     
            {
         path: "add-query",
         Component: AddQuery,

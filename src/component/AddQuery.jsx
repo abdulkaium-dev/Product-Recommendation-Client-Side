@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { getAuth } from "firebase/auth";
 import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
 
 export default function AddQuery() {
   const [formData, setFormData] = useState({
@@ -13,6 +14,7 @@ export default function AddQuery() {
 
   const auth = getAuth();
   const user = auth.currentUser;
+  const navigate = useNavigate(); // 🔥 added
 
   const handleChange = (e) => {
     setFormData((prev) => ({
@@ -59,7 +61,6 @@ export default function AddQuery() {
           confirmButtonColor: "#22c55e",
         });
 
-        // Reset form
         setFormData({
           productName: "",
           productBrand: "",
@@ -67,6 +68,9 @@ export default function AddQuery() {
           queryTitle: "",
           boycottingReason: "",
         });
+
+        // 🔥 Redirect to /my-queries
+        navigate("/my-queries");
       }
     } catch (error) {
       console.error("Error adding query:", error);

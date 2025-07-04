@@ -6,15 +6,23 @@ export default function Queries() {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
-  // Fetch all queries
+  // Fetch all queries from backend
   const fetchQueries = async () => {
     try {
       const res = await fetch("http://localhost:3000/products");
+      if (!res.ok) {
+        throw new Error(`HTTP error! status: ${res.status}`);
+      }
       const data = await res.json();
-      const sorted = data.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+      // Sort by date descending (most recent first)
+      const sorted = data.sort(
+        (a, b) => new Date(b.date || 0) - new Date(a.date || 0)
+      );
       setQueries(sorted);
     } catch (error) {
-      console.error("Failed to fetch queries", error);
+      console.error("Failed to fetch queries:", error);
+      setQueries([]); // reset queries on error
     } finally {
       setLoading(false);
     }
@@ -50,15 +58,16 @@ export default function Queries() {
           >
             <img
               src={query.productImageUrl || "/placeholder.jpg"}
-              alt={query.productName}
+              alt={query.productName || "Product Image"}
               onError={(e) => (e.target.src = "/placeholder.jpg")}
               className="h-48 w-full object-cover rounded mb-4"
             />
             <h2 className="text-2xl font-semibold text-purple-700 mb-2">
-              {query.queryTitle}
+              {query.queryTitle || "No Title"}
             </h2>
             <p className="text-gray-600 mb-1">
-              <strong>Product:</strong> {query.productName} ({query.productBrand})
+              <strong>Product:</strong>{" "}
+              {query.productName || "Unknown"} ({query.productBrand || "N/A"})
             </p>
             <p className="text-gray-500 mb-1 text-sm">
               <strong>Recommendations:</strong> {query.recommendationCount || 0}
@@ -68,6 +77,7 @@ export default function Queries() {
             </p>
             <button
               onClick={() => navigate(`/query/${query._id}`)}
+              aria-label={`Recommend query titled ${query.queryTitle}`}
               className="mt-auto bg-purple-600 text-white py-2 rounded-lg hover:bg-purple-700 transition"
             >
               Recommend
