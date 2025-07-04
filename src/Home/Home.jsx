@@ -8,11 +8,13 @@ import ProductGrid from '../component/ProductGrid';
 const Home = () => {
   return (
     <main>
+            
       <HomeSlider />
+      <ProductGrid></ProductGrid>
       <FeaturesSection />
       <Testimonials />
       <WhyBoycottMatters />
-      <ProductGrid></ProductGrid>
+
     </main>
   );
 };

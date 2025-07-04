@@ -9,7 +9,7 @@ export default function MyRecommendations() {
   const user = auth.currentUser;
 
   useEffect(() => {
-    if (!user) return;
+    if (!user?.email) return;
 
     const fetchRecommendations = async () => {
       try {
@@ -28,9 +28,9 @@ export default function MyRecommendations() {
     };
 
     fetchRecommendations();
-  }, [user]);
+  }, [user?.email]);
 
-  const handleDelete = async (id, queryId) => {
+  const handleDelete = async (id) => {
     const result = await Swal.fire({
       title: "Are you sure?",
       text: "You won't be able to revert this!",
@@ -42,25 +42,12 @@ export default function MyRecommendations() {
     if (!result.isConfirmed) return;
 
     try {
-      // Delete recommendation from backend
       const res = await fetch(`http://localhost:3000/recommendations/${id}`, {
         method: "DELETE",
       });
 
       if (!res.ok) throw new Error("Delete failed");
 
-      // Decrement recommendationCount of the associated query
-      const updateRes = await fetch(`http://localhost:3000/products/${queryId}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ decrementRecommendationCount: true }),
-      });
-
-      if (!updateRes.ok) throw new Error("Failed to update recommendation count");
-
-      // Update UI state by removing deleted recommendation
       setRecommendations((prev) => prev.filter((rec) => rec._id !== id));
 
       Swal.fire("Deleted!", "Your recommendation has been deleted.", "success");
@@ -105,7 +92,7 @@ export default function MyRecommendations() {
                 </td>
                 <td className="border border-gray-300 px-4 py-2">
                   <button
-                    onClick={() => handleDelete(rec._id, rec.queryId)}
+                    onClick={() => handleDelete(rec._id)}
                     className="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700"
                     aria-label={`Delete recommendation for ${rec.title}`}
                   >
