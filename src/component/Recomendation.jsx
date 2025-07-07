@@ -1,19 +1,34 @@
 import React, { useEffect, useState } from "react";
-import { getAuth } from "firebase/auth";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 export default function Recommendation() {
   const [recommendations, setRecommendations] = useState([]);
   const [loading, setLoading] = useState(true);
-  const auth = getAuth();
-  const user = auth.currentUser;
+  const [userEmail, setUserEmail] = useState(null);
 
   useEffect(() => {
-    if (!user) return;
+    const auth = getAuth();
+
+    // Wait for Firebase to confirm the user state
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setUserEmail(user.email);
+      } else {
+        setUserEmail(null);
+        setLoading(false);
+      }
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+  useEffect(() => {
+    if (!userEmail) return;
 
     async function fetchRecommendations() {
       try {
         const res = await fetch(
-          `http://localhost:3000/myqueries/recommendations?email=${encodeURIComponent(user.email)}`
+          `http://localhost:3000/myqueries/recommendations?email=${encodeURIComponent(userEmail)}`
         );
         if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
         const data = await res.json();
@@ -27,11 +42,18 @@ export default function Recommendation() {
     }
 
     fetchRecommendations();
-  }, [user]);
+  }, [userEmail]);
 
   if (loading)
     return (
       <div className="text-center py-20 text-xl text-gray-600">Loading...</div>
+    );
+
+  if (!userEmail)
+    return (
+      <div className="text-center py-20 text-red-600 text-lg">
+        Please log in to view your recommendations.
+      </div>
     );
 
   if (recommendations.length === 0)
@@ -51,25 +73,30 @@ export default function Recommendation() {
         <table className="table-auto w-full border-collapse border border-gray-300">
           <thead>
             <tr className="bg-gray-100">
-              <th className="border border-gray-300 px-4 py-2 text-left">Title</th>
-              <th className="border border-gray-300 px-4 py-2 text-left">Product Name</th>
-              <th className="border border-gray-300 px-4 py-2 text-left">Reason</th>
-              <th className="border border-gray-300 px-4 py-2 text-left">Recommender</th>
-              <th className="border border-gray-300 px-4 py-2 text-left">Recommended At</th>
+              <th className="border px-4 py-2 text-left">Title</th>
+              <th className="border px-4 py-2 text-left">Product Name</th>
+              <th className="border px-4 py-2 text-left">Reason</th>
+              <th className="border px-4 py-2 text-left">Recommender</th>
+              <th className="border px-4 py-2 text-left">Recommended At</th>
             </tr>
           </thead>
           <tbody>
             {recommendations.map((rec) => (
               <tr key={rec._id} className="hover:bg-gray-50">
-                <td className="border border-gray-300 px-4 py-2">{rec.title}</td>
-                <td className="border border-gray-300 px-4 py-2">{rec.productName}</td>
-                <td className="border border-gray-300 px-4 py-2">{rec.reason}</td>
-                <td className="border border-gray-300 px-4 py-2">
-                  {rec.recommenderName} <br />
-                  <small className="text-xs text-gray-500">{rec.recommenderEmail}</small>
+                <td className="border px-4 py-2">{rec.title}</td>
+                <td className="border px-4 py-2">{rec.productName}</td>
+                <td className="border px-4 py-2">{rec.reason}</td>
+                <td className="border px-4 py-2">
+                  {rec.recommenderName}
+                  <br />
+                  <small className="text-xs text-gray-500">
+                    {rec.recommenderEmail}
+                  </small>
                 </td>
-                <td className="border border-gray-300 px-4 py-2">
-                  {new Date(rec.createdAt).toLocaleString()}
+                <td className="border px-4 py-2">
+                  {rec.createdAt
+                    ? new Date(rec.createdAt).toLocaleString()
+                    : "N/A"}
                 </td>
               </tr>
             ))}

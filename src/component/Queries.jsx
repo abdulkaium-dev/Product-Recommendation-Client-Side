@@ -6,20 +6,21 @@ export default function Queries() {
   const [filteredQueries, setFilteredQueries] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
-  const [layout, setLayout] = useState(3); // default 3-column layout
+  const [layout, setLayout] = useState(3); // Default 3-column layout
   const navigate = useNavigate();
 
   // Fetch all queries from backend
   const fetchQueries = async () => {
     try {
       const res = await fetch("http://localhost:3000/products");
-      if (!res.ok) {
-        throw new Error(`HTTP error! status: ${res.status}`);
-      }
+      if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
       const data = await res.json();
+
+      // Sort queries by date descending
       const sorted = data.sort(
         (a, b) => new Date(b.date || 0) - new Date(a.date || 0)
       );
+
       setQueries(sorted);
       setFilteredQueries(sorted);
     } catch (error) {
@@ -35,7 +36,7 @@ export default function Queries() {
     fetchQueries();
   }, []);
 
-  // Handle search filter
+  // Filter queries based on search text
   useEffect(() => {
     const result = queries.filter((q) =>
       q.productName?.toLowerCase().includes(search.toLowerCase())
@@ -53,8 +54,8 @@ export default function Queries() {
         All Product Queries
       </h1>
 
-      {/* 🔍 Search Input */}
-      <div className="mb-4 flex justify-center">
+      {/* Search Input */}
+      <div className="mb-6 flex justify-center">
         <input
           type="text"
           placeholder="Search by product name..."
@@ -64,7 +65,7 @@ export default function Queries() {
         />
       </div>
 
-      {/* 📐 Layout Toggle Buttons */}
+      {/* Layout Toggle Buttons */}
       <div className="flex justify-center gap-4 mb-8">
         {[1, 2, 3].map((num) => (
           <button
@@ -81,6 +82,7 @@ export default function Queries() {
         ))}
       </div>
 
+      {/* Queries Grid */}
       {filteredQueries.length === 0 ? (
         <p className="text-center text-gray-500 mt-10 text-lg">
           No matching queries found.
@@ -98,34 +100,51 @@ export default function Queries() {
           {filteredQueries.map((query) => (
             <div
               key={query._id}
-              className="bg-white rounded-xl shadow-md p-6 flex flex-col border-t-4 border-purple-500"
+              className="relative bg-white rounded-2xl shadow-xl overflow-hidden transition-transform transform hover:scale-[1.02] border border-purple-100"
             >
-              <img
-                src={query.productImageUrl || "/placeholder.jpg"}
-                alt={query.productName || "Product Image"}
-                onError={(e) => (e.target.src = "/placeholder.jpg")}
-                className="h-48 w-full object-cover rounded mb-4"
-              />
-              <h2 className="text-2xl font-semibold text-purple-700 mb-2">
-                {query.queryTitle || "No Title"}
-              </h2>
-              <p className="text-gray-600 mb-1">
-                <strong>Product:</strong> {query.productName || "Unknown"} (
-                {query.productBrand || "N/A"})
-              </p>
-              <p className="text-gray-500 mb-1 text-sm">
-                <strong>Recommendations:</strong>{" "}
-                {query.recommendationCount || 0}
-              </p>
-              <p className="text-gray-400 text-sm mb-3">
-                <strong>By:</strong> {query.userName || "Anonymous"}
-              </p>
-              <button
-                onClick={() => navigate(`/query/${query._id}`)}
-                className="mt-auto bg-purple-600 text-white py-2 rounded-lg hover:bg-purple-700 transition"
-              >
-                Recommend
-              </button>
+              {/* Image with gradient overlay */}
+              <div className="relative h-48 w-full overflow-hidden rounded-t-2xl">
+                <img
+                  src={query.productImageUrl || "/placeholder.jpg"}
+                  alt={query.productName || "Product Image"}
+                  onError={(e) => (e.target.src = "/placeholder.jpg")}
+                  className="h-full w-full object-cover transition duration-300 hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
+              </div>
+
+              {/* Card Content */}
+              <div className="p-5">
+                <h2 className="text-xl font-bold text-purple-700 mb-2">
+                  {query.queryTitle || "No Title"}
+                </h2>
+
+                <p className="text-gray-700 mb-1">
+                  <strong>🛍️ Product:</strong> {query.productName || "Unknown"} (
+                  {query.productBrand || "N/A"})
+                </p>
+
+                <p className="text-sm text-gray-500 mb-1">
+                  <strong>💬 Recommendations:</strong> {query.recommendationCount || 0}
+                </p>
+
+                <p className="text-sm text-gray-400 mb-3">
+                  <strong>👤 By:</strong> {query.userName || "Anonymous"}
+                </p>
+
+                {/* Recommend Button */}
+                <button
+                  onClick={() => navigate(`/query/${query._id}`)}
+                  className="mt-3 w-full bg-purple-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-purple-700 transition duration-200"
+                >
+                  Recommend 💡
+                </button>
+              </div>
+
+              {/* Date Badge */}
+              <div className="absolute top-3 right-3 bg-white text-purple-600 text-xs font-semibold px-3 py-1 rounded-full shadow">
+                📅 {new Date(query.date).toLocaleDateString()}
+              </div>
             </div>
           ))}
         </div>

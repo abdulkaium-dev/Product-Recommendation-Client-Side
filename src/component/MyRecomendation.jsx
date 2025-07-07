@@ -48,6 +48,7 @@ export default function MyRecommendations() {
 
       if (!res.ok) throw new Error("Delete failed");
 
+      // Remove from local state
       setRecommendations((prev) => prev.filter((rec) => rec._id !== id));
 
       Swal.fire("Deleted!", "Your recommendation has been deleted.", "success");
@@ -58,7 +59,9 @@ export default function MyRecommendations() {
   };
 
   if (loading)
-    return <div className="text-center py-20 text-xl text-gray-600">Loading...</div>;
+    return (
+      <div className="text-center py-20 text-xl text-gray-600">Loading...</div>
+    );
 
   if (recommendations.length === 0)
     return (
@@ -68,33 +71,39 @@ export default function MyRecommendations() {
     );
 
   return (
-    <div className="max-w-6xl mx-auto p-4">
-      <h1 className="text-3xl font-bold mb-6 text-purple-600">My Recommendations</h1>
+    <div className="max-w-7xl mx-auto p-6">
+      <h1 className="text-3xl font-bold mb-8 text-purple-700 text-center">
+        My Recommendations
+      </h1>
+
       <div className="overflow-x-auto">
-        <table className="table-auto w-full border-collapse border border-gray-300">
+        <table className="min-w-full table-auto border-collapse border border-gray-300">
           <thead>
-            <tr className="bg-gray-100">
+            <tr className="bg-purple-100 text-purple-800">
               <th className="border border-gray-300 px-4 py-2 text-left">Title</th>
-              <th className="border border-gray-300 px-4 py-2 text-left">Product Name</th>
+              <th className="border border-gray-300 px-4 py-2 text-left">Product</th>
               <th className="border border-gray-300 px-4 py-2 text-left">Reason</th>
               <th className="border border-gray-300 px-4 py-2 text-left">Recommended At</th>
-              <th className="border border-gray-300 px-4 py-2 text-left">Actions</th>
+              <th className="border border-gray-300 px-4 py-2 text-center">Actions</th>
             </tr>
           </thead>
           <tbody>
             {recommendations.map((rec) => (
-              <tr key={rec._id} className="hover:bg-gray-50">
-                <td className="border border-gray-300 px-4 py-2">{rec.title}</td>
-                <td className="border border-gray-300 px-4 py-2">{rec.productName}</td>
-                <td className="border border-gray-300 px-4 py-2">{rec.reason}</td>
-                <td className="border border-gray-300 px-4 py-2">
+              <tr
+                key={rec._id}
+                className="hover:bg-purple-50 even:bg-purple-50/50"
+              >
+                <td className="border border-gray-300 px-4 py-2 max-w-xs truncate">{rec.title || "-"}</td>
+                <td className="border border-gray-300 px-4 py-2 max-w-xs truncate">{rec.productName || "-"}</td>
+                <td className="border border-gray-300 px-4 py-2 max-w-md truncate">{rec.reason || "-"}</td>
+                <td className="border border-gray-300 px-4 py-2 whitespace-nowrap">
                   {new Date(rec.createdAt).toLocaleString()}
                 </td>
-                <td className="border border-gray-300 px-4 py-2">
+                <td className="border border-gray-300 px-4 py-2 text-center">
                   <button
                     onClick={() => handleDelete(rec._id)}
-                    className="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700"
-                    aria-label={`Delete recommendation for ${rec.title}`}
+                    className="bg-red-600 hover:bg-red-700 text-white py-1 px-3 rounded-lg font-semibold transition"
+                    aria-label={`Delete recommendation titled ${rec.title}`}
                   >
                     Delete
                   </button>
