@@ -17,7 +17,7 @@ export default function UpdateQuery() {
   useEffect(() => {
     const fetchQuery = async () => {
       try {
-        const res = await fetch(`http://localhost:3000/products/${id}`);
+        const res = await fetch(`https://server-code-three.vercel.app/products/${id}`);
         if (!res.ok) throw new Error("Failed to fetch query");
         const data = await res.json();
         if (!data || !data._id) throw new Error("Query not found");
@@ -54,7 +54,7 @@ export default function UpdateQuery() {
     e.preventDefault();
 
     try {
-      const res = await fetch(`http://localhost:3000/products/${id}`, {
+      const res = await fetch(`https://server-code-three.vercel.app/products/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(queryData),

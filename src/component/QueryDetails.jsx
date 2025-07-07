@@ -23,14 +23,14 @@ const QueryDetails = () => {
     setLoading(true);
     try {
       // Fetch product by ID
-      const resQuery = await fetch(`http://localhost:3000/products/${id}`);
+      const resQuery = await fetch(`https://server-code-three.vercel.app/products/${id}`);
       if (!resQuery.ok) throw new Error("Query not found");
       const query = await resQuery.json();
       setQueryData(query);
 
       // Fetch recommendations for this query (all recommendations that have queryId == id)
       const resRecs = await fetch(
-        `http://localhost:3000/recommendations?queryId=${encodeURIComponent(id)}`
+        `https://server-code-three.vercel.app/recommendations?queryId=${encodeURIComponent(id)}`
       );
 
       if (!resRecs.ok) throw new Error("Failed to fetch recommendations");
@@ -85,7 +85,7 @@ const QueryDetails = () => {
 
     try {
       // POST recommendation
-      const res = await fetch("http://localhost:3000/recommendations", {
+      const res = await fetch("https://server-code-three.vercel.app/recommendations", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(recommendation),

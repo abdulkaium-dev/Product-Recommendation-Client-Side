@@ -14,7 +14,7 @@ export default function MyRecommendations() {
     const fetchRecommendations = async () => {
       try {
         const res = await fetch(
-          `http://localhost:3000/recommendations?email=${encodeURIComponent(user.email)}`
+          `https://server-code-three.vercel.app/recommendations?email=${encodeURIComponent(user.email)}`
         );
         if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
         const data = await res.json();
@@ -42,7 +42,7 @@ export default function MyRecommendations() {
     if (!result.isConfirmed) return;
 
     try {
-      const res = await fetch(`http://localhost:3000/recommendations/${id}`, {
+      const res = await fetch(`https://server-code-three.vercel.app/recommendations/${id}`, {
         method: "DELETE",
       });
 

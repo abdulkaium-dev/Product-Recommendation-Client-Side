@@ -45,7 +45,7 @@ export default function AddQuery() {
     };
 
     try {
-      const res = await fetch("http://localhost:3000/products", {
+      const res = await fetch("https://server-code-three.vercel.app/products", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

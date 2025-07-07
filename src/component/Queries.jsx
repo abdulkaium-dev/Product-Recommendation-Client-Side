@@ -12,7 +12,7 @@ export default function Queries() {
   // Fetch all queries from backend
   const fetchQueries = async () => {
     try {
-      const res = await fetch("http://localhost:3000/products");
+      const res = await fetch("https://server-code-three.vercel.app/products");
       if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
       const data = await res.json();
 

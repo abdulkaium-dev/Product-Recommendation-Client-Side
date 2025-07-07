@@ -28,7 +28,7 @@ export default function Recommendation() {
     async function fetchRecommendations() {
       try {
         const res = await fetch(
-          `http://localhost:3000/myqueries/recommendations?email=${encodeURIComponent(userEmail)}`
+          `https://server-code-three.vercel.app/myqueries/recommendations?email=${encodeURIComponent(userEmail)}`
         );
         if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
         const data = await res.json();

@@ -15,7 +15,7 @@ export default function MyQueries() {
   const fetchQueries = async () => {
     if (!user) return;
     try {
-      const res = await fetch(`http://localhost:3000/products?email=${encodeURIComponent(user.email)}`);
+      const res = await fetch(`https://server-code-three.vercel.app/products?email=${encodeURIComponent(user.email)}`);
       if (!res.ok) throw new Error(`Failed to fetch: ${res.status}`);
       const data = await res.json();
       // Sort by date descending
@@ -46,7 +46,7 @@ export default function MyQueries() {
 
     if (confirm.isConfirmed) {
       try {
-        const res = await fetch(`http://localhost:3000/products/${id}`, { method: "DELETE" });
+        const res = await fetch(`https://server-code-three.vercel.app/products/${id}`, { method: "DELETE" });
         if (!res.ok) throw new Error("Delete request failed");
         const result = await res.json();
         if (result.deletedCount > 0) {
