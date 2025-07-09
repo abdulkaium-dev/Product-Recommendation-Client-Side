@@ -249,3 +249,4 @@ const QueryDetails = () => {
 };
 
 export default QueryDetails;
+  

@@ -1,20 +1,16 @@
-import React from 'react';
-import HomeSlider from '../component/Slider';
-import FeaturesSection from '../component/FeaturesSection';
-import Testimonials from '../component/Testimonials';
-import WhyBoycottMatters from '../component/WhyBoycottMatters';
-import ProductGrid from '../component/ProductGrid';
+import React from "react";
+import HomeSlider from "../component/Slider";
+import Testimonials from "../component/Testimonials";
+import WhyBoycottMatters from "../component/WhyBoycottMatters";
+import RecentProducts from "../component/RecentProducts";
 
 const Home = () => {
   return (
     <main>
-            
       <HomeSlider />
-      <ProductGrid></ProductGrid>
-      <FeaturesSection />
-      <Testimonials />
+      <RecentProducts />
       <WhyBoycottMatters />
-
+      <Testimonials />
     </main>
   );
 };

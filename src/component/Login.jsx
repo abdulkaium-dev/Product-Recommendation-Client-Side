@@ -77,11 +77,6 @@ const Login = () => {
                 {showPassword ? <FiEyeOff size={20} /> : <FiEye size={20} />}
               </span>
             </div>
-
-            <div className="text-right text-sm text-blue-500 hover:underline cursor-pointer">
-              Forgot password?
-            </div>
-
             <button
               type="submit"
               className="bg-[#885a5c] hover:bg-[#6d4649] text-white py-3 rounded transition"

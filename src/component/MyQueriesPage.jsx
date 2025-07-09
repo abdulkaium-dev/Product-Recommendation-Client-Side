@@ -15,10 +15,12 @@ export default function MyQueries() {
   const fetchQueries = async () => {
     if (!user) return;
     try {
-      const res = await fetch(`https://server-code-three.vercel.app/products?email=${encodeURIComponent(user.email)}`);
+      const res = await fetch(
+        `https://server-code-three.vercel.app/products?email=${encodeURIComponent(user.email)}`
+      );
       if (!res.ok) throw new Error(`Failed to fetch: ${res.status}`);
       const data = await res.json();
-      // Sort by date descending
+      // Sort by date descending (newest first)
       const sorted = data.sort((a, b) => new Date(b.date) - new Date(a.date));
       setQueries(sorted);
     } catch (error) {
@@ -42,22 +44,25 @@ export default function MyQueries() {
       confirmButtonColor: "#ef4444",
       cancelButtonColor: "#6b7280",
       confirmButtonText: "Yes, delete it!",
+      cancelButtonText: "Cancel",
     });
 
     if (confirm.isConfirmed) {
       try {
-        const res = await fetch(`https://server-code-three.vercel.app/products/${id}`, { method: "DELETE" });
+        const res = await fetch(`https://server-code-three.vercel.app/products/${id}`, {
+          method: "DELETE",
+        });
         if (!res.ok) throw new Error("Delete request failed");
         const result = await res.json();
         if (result.deletedCount > 0) {
-          Swal.fire("Deleted!", "Your query has been removed.", "success");
-          fetchQueries(); // Refresh list
+          Swal.fire("Deleted!", "Your query has been deleted.", "success");
+          fetchQueries();
         } else {
           Swal.fire("Error", "Could not delete the query.", "error");
         }
       } catch (error) {
         console.error("Delete error:", error);
-        Swal.fire("Error", "Something went wrong.", "error");
+        Swal.fire("Error", "Something went wrong. Please try again.", "error");
       }
     }
   };
@@ -68,7 +73,6 @@ export default function MyQueries() {
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-10">
-
       {/* Stylish Banner */}
       <div className="bg-gradient-to-r from-purple-600 via-pink-500 to-red-500 text-white p-8 rounded-3xl shadow-lg mb-10 flex flex-col md:flex-row justify-between items-center gap-4">
         <h2 className="text-3xl md:text-4xl font-bold">My Product Queries</h2>
@@ -77,12 +81,12 @@ export default function MyQueries() {
           className="bg-white text-purple-700 px-5 py-2 rounded-xl font-semibold hover:scale-105 transition"
           aria-label="Add new product query"
         >
-          + Add Queries
+          + Add Query
         </button>
       </div>
 
       {/* Layout Toggle Buttons */}
-      <div className="flex justify-end gap-2 mb-6">
+      <div className="flex justify-end gap-2 mb-6" role="group" aria-label="Layout toggle">
         {[1, 2, 3].map((num) => (
           <button
             key={num}
@@ -98,7 +102,7 @@ export default function MyQueries() {
         ))}
       </div>
 
-      {/* No Queries Message */}
+      {/* If no queries */}
       {queries.length === 0 ? (
         <div className="text-center py-20 space-y-6">
           <p className="text-xl text-gray-600">You haven’t added any queries yet.</p>
@@ -111,7 +115,7 @@ export default function MyQueries() {
           </button>
         </div>
       ) : (
-        // Queries Grid
+        // Queries grid
         <div
           className={`grid gap-6 ${
             columns === 1
@@ -121,47 +125,58 @@ export default function MyQueries() {
               : "sm:grid-cols-2 lg:grid-cols-3"
           }`}
           role="list"
+          aria-live="polite"
         >
           {queries.map((query) => (
             <div
               key={query._id}
-              className="bg-white p-5 rounded-xl shadow-md border-t-4 border-purple-500 flex flex-col"
               role="listitem"
+              className="flex flex-col rounded-3xl shadow-lg overflow-hidden
+                         bg-gradient-to-tr from-pink-500 via-purple-600 to-indigo-700
+                         text-white border-4 border-purple-800
+                         hover:from-purple-700 hover:via-pink-600 hover:to-red-600
+                         transition-transform duration-300 hover:scale-[1.03]"
             >
               <img
                 src={query.productImageUrl || "/placeholder.jpg"}
                 alt={query.productName || "Product image"}
-                className="h-44 w-full object-cover rounded-md mb-4"
+                className="h-44 w-full object-cover brightness-90 hover:brightness-110 transition duration-300"
                 onError={(e) => (e.target.src = "/placeholder.jpg")}
               />
-              <h3 className="text-xl font-bold text-purple-700 mb-1">{query.queryTitle || "Untitled Query"}</h3>
-              <p className="text-sm text-gray-600">Brand: {query.productBrand || "N/A"}</p>
-              <p className="text-sm text-gray-400 mb-3">
-                Submitted: {query.date ? new Date(query.date).toLocaleString() : "Unknown"}
-              </p>
+              <div className="p-6 flex flex-col flex-grow">
+                <h3 className="text-xl font-extrabold drop-shadow-md mb-2 truncate">
+                  {query.queryTitle || "Untitled Query"}
+                </h3>
+                <p className="text-purple-200 font-semibold mb-1">
+                  Brand: {query.productBrand || "N/A"}
+                </p>
+                <p className="text-purple-300 text-sm flex-grow mb-4 line-clamp-3">
+                  Submitted: {query.date ? new Date(query.date).toLocaleString() : "Unknown"}
+                </p>
 
-              <div className="flex flex-wrap gap-2 mt-auto">
-                <button
-                  onClick={() => navigate(`/query/${query._id}`)}
-                  className="bg-indigo-500 text-white px-3 py-1 rounded hover:bg-indigo-600"
-                  aria-label={`View details of query: ${query.queryTitle}`}
-                >
-                  View Details
-                </button>
-                <button
-                  onClick={() => navigate(`/update-query/${query._id}`)}
-                  className="bg-amber-500 text-white px-3 py-1 rounded hover:bg-amber-600"
-                  aria-label={`Update query: ${query.queryTitle}`}
-                >
-                  Update
-                </button>
-                <button
-                  onClick={() => handleDelete(query._id, query.queryTitle)}
-                  className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
-                  aria-label={`Delete query: ${query.queryTitle}`}
-                >
-                  Delete
-                </button>
+                <div className="flex flex-wrap gap-2 mt-auto">
+                  <button
+                    onClick={() => navigate(`/query/${query._id}`)}
+                    className="bg-indigo-500 text-white px-3 py-1 rounded hover:bg-indigo-600"
+                    aria-label={`View details of query: ${query.queryTitle}`}
+                  >
+                    View Details
+                  </button>
+                  <button
+                    onClick={() => navigate(`/update-query/${query._id}`)}
+                    className="bg-amber-500 text-white px-3 py-1 rounded hover:bg-amber-600"
+                    aria-label={`Update query: ${query.queryTitle}`}
+                  >
+                    Update
+                  </button>
+                  <button
+                    onClick={() => handleDelete(query._id, query.queryTitle)}
+                    className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
+                    aria-label={`Delete query: ${query.queryTitle}`}
+                  >
+                    Delete
+                  </button>
+                </div>
               </div>
             </div>
           ))}
