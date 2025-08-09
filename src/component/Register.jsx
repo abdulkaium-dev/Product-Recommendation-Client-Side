@@ -12,7 +12,6 @@ const Register = () => {
 
   const [showPassword, setShowPassword] = useState(false);
   const togglePassword = () => setShowPassword(prev => !prev);
-
   const [user, setUser] = useState(null);
 
   const RegisterSubmit = async (e) => {
@@ -70,47 +69,79 @@ const Register = () => {
   };
 
   return (
-    <div className="min-h-screen flex justify-center items-center bg-gradient-to-tr from-[#2b1f5c] via-[#c62861] to-[#e44d26] p-6">
-      <div className="w-full max-w-md bg-white rounded-xl shadow-md p-8 text-black">
-        <h2 className="text-2xl font-bold text-center mb-6">Register</h2>
+    <div className="min-h-screen flex justify-center items-center bg-gradient-to-tr from-indigo-900 via-indigo-600 to-indigo-400 p-6">
+      <div className="w-full max-w-md bg-white rounded-xl shadow-lg p-8 text-black">
+        
+        {/* Heading */}
+        <h2 className="text-3xl font-extrabold text-center mb-6 text-indigo-700">
+          Create an Account
+        </h2>
 
-        <form className="space-y-4" onSubmit={RegisterSubmit}>
-          <input className="w-full p-3 border rounded" type="text" name="name" placeholder="Name" required />
-          <input className="w-full p-3 border rounded" type="email" name="email" placeholder="Email" required />
+        {/* Form */}
+        <form className="space-y-5" onSubmit={RegisterSubmit}>
+          <input
+            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition"
+            type="text"
+            name="name"
+            placeholder="Full Name"
+            required
+          />
+          <input
+            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition"
+            type="email"
+            name="email"
+            placeholder="Email Address"
+            required
+          />
 
+          {/* Password Field */}
           <div className="relative">
             <input
               type={showPassword ? 'text' : 'password'}
               name="password"
               placeholder="Password"
               required
-              className="w-full p-3 border rounded"
+              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition pr-12"
             />
             <span
               onClick={togglePassword}
-              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-600 cursor-pointer"
+              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-indigo-600 cursor-pointer transition"
             >
               {showPassword ? <FiEyeOff size={20} /> : <FiEye size={20} />}
             </span>
           </div>
 
-          <input className="w-full p-3 border rounded" type="url" name="photoUrl" placeholder="Photo URL (Optional)" />
-          <button type="submit" className="w-full bg-[#885a5c] hover:bg-[#6d4649] text-white py-3 rounded transition ">
+          <input
+            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition"
+            type="url"
+            name="photoUrl"
+            placeholder="Photo URL (Optional)"
+          />
+
+          {/* Submit Button */}
+          <button
+            type="submit"
+            className="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-3 rounded-lg font-semibold shadow-md transition"
+          >
             Register
           </button>
         </form>
 
+        {/* Google Login */}
         <button
           onClick={handleGoogleLogin}
-          className="mt-4 w-full bg-white text-black border p-2 rounded-lg flex items-center justify-center gap-2 shadow-md hover:shadow-lg transition"
+          className="mt-5 w-full bg-white text-gray-800 border border-gray-300 hover:border-indigo-500 rounded-lg py-3 flex items-center justify-center gap-3 font-semibold shadow-sm hover:shadow-md transition"
         >
           <FcGoogle size={24} />
-          <span>Register with Google</span>
+          Register with Google
         </button>
 
-        <p className="mt-4 text-center">
+        {/* Login Redirect */}
+        <p className="mt-6 text-center text-sm text-gray-600">
           Already have an account?{" "}
-          <Link to="/login" className="text-blue-600 font-bold underline">Login here</Link>
+          <Link to="/login" className="text-indigo-600 font-bold underline hover:text-indigo-800">
+            Login here
+          </Link>
         </p>
       </div>
     </div>
