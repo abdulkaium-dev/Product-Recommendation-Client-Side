@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { AuthContext } from "./AuthProvider";
 import { toast } from "react-toastify";
@@ -26,18 +26,6 @@ export default function Navbar() {
     deleteSpeed: 50,
   });
 
-  // Setting CSS variables dynamically on root for light mode
-  useEffect(() => {
-    const root = document.documentElement;
-    root.style.setProperty("--color-primary", "#4f46e5"); // Indigo 600
-    root.style.setProperty("--color-bg-light", "#eef2ff"); // Indigo 50
-    root.style.setProperty("--color-bg-dark", "#312e81"); // Indigo 900
-    root.style.setProperty("--color-text-light", "#3730a3"); // Indigo 700
-    root.style.setProperty("--color-text-dark", "#e0e7ff"); // Indigo 200
-    root.style.setProperty("--color-primary-hover", "#4338ca"); // Indigo 700-ish
-  }, []);
-
-  // Navigation routes
   const commonItems = [
     { name: "Home", path: "/" },
     { name: "Queries", path: "/queries" },
@@ -63,8 +51,8 @@ export default function Navbar() {
         className={({ isActive }) =>
           `transition-colors duration-200 px-3 py-2 rounded-md font-medium ${
             isActive
-              ? "text-primary font-semibold"
-              : "text-text-light dark:text-text-dark hover:text-primary"
+              ? "text-indigo-600 font-semibold"
+              : "text-indigo-700 dark:text-indigo-200 hover:text-indigo-600"
           }`
         }
       >
@@ -75,7 +63,7 @@ export default function Navbar() {
   const UserAvatar = () => (
     <div
       title={user?.displayName || "User"}
-      className="w-10 h-10 rounded-full overflow-hidden border-2 border-primary shrink-0"
+      className="w-10 h-10 rounded-full overflow-hidden border-2 border-indigo-600 shrink-0"
     >
       <img
         src={user?.photoURL || "/default-avatar.png"}
@@ -87,20 +75,12 @@ export default function Navbar() {
 
   return (
     <>
-      {/* Navbar background full width and sticky */}
-      <nav
-        className="fixed top-0 left-0 w-full z-50"
-        style={{
-          backgroundColor: "var(--color-bg-light)",
-          boxShadow: "0 1px 4px rgba(0, 0, 0, 0.1)",
-        }}
-        data-theme={window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"}
-      >
-        {/* Navbar content wrapper with max width and padding */}
+      {/* Navbar */}
+      <nav className="fixed top-0 left-0 w-full z-50 bg-indigo-50 dark:bg-indigo-900 shadow-md">
         <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-10">
           <div className="flex justify-between items-center h-16">
-            {/* Logo & Title */}
-            <div className="flex items-center gap-3 text-2xl font-bold text-primary whitespace-nowrap overflow-hidden">
+            {/* Logo */}
+            <div className="flex items-center gap-3 text-2xl font-bold text-indigo-600 dark:text-indigo-200 whitespace-nowrap overflow-hidden">
               <span className="truncate">{text}</span>
               <Cursor cursorStyle="|" />
             </div>
@@ -113,8 +93,7 @@ export default function Navbar() {
                   <UserAvatar />
                   <button
                     onClick={handleLogout}
-                    className="bg-primary text-white px-4 py-1 rounded-md hover:bg-primary-hover transition focus:outline-none focus:ring-2 focus:ring-primary"
-                    aria-label="Logout"
+                    className="bg-indigo-600 text-white px-4 py-1 rounded-md hover:bg-indigo-700 transition focus:outline-none focus:ring-2 focus:ring-indigo-600"
                   >
                     Logout
                   </button>
@@ -126,17 +105,14 @@ export default function Navbar() {
             <div className="md:hidden">
               <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="p-2 rounded-md text-text-light hover:text-primary hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-primary transition dark:text-text-dark dark:hover:text-primary dark:hover:bg-gray-700"
-                aria-label="Toggle menu"
-                aria-expanded={isOpen}
+                className="p-2 rounded-md text-indigo-700 dark:text-indigo-200 hover:text-indigo-600 hover:bg-indigo-100 dark:hover:bg-indigo-800 focus:outline-none focus:ring-2 focus:ring-indigo-600 transition"
               >
                 {isOpen ? (
                   <svg
                     className="h-6 w-6"
-                    viewBox="0 0 24 24"
                     fill="none"
                     stroke="currentColor"
-                    aria-hidden="true"
+                    viewBox="0 0 24 24"
                   >
                     <path
                       strokeLinecap="round"
@@ -148,10 +124,9 @@ export default function Navbar() {
                 ) : (
                   <svg
                     className="h-6 w-6"
-                    viewBox="0 0 24 24"
                     fill="none"
                     stroke="currentColor"
-                    aria-hidden="true"
+                    viewBox="0 0 24 24"
                   >
                     <path
                       strokeLinecap="round"
@@ -168,11 +143,8 @@ export default function Navbar() {
 
         {/* Mobile Menu */}
         {isOpen && (
-          <div
-            className="md:hidden px-6 pb-4 border-t"
-            style={{ backgroundColor: "var(--color-bg-light)", borderColor: "#c7d2fe" }}
-          >
-            <nav className="flex flex-col space-y-4" aria-label="Mobile navigation">
+          <div className="md:hidden px-6 pb-4 border-t border-indigo-200 dark:border-indigo-700 bg-indigo-50 dark:bg-indigo-900">
+            <nav className="flex flex-col space-y-4">
               {renderLinks(true)}
               {user && (
                 <>
@@ -182,8 +154,7 @@ export default function Navbar() {
                       setIsOpen(false);
                       handleLogout();
                     }}
-                    className="bg-primary text-white px-4 py-1 rounded-md hover:bg-primary-hover transition mt-2"
-                    aria-label="Logout"
+                    className="bg-indigo-600 text-white px-4 py-1 rounded-md hover:bg-indigo-700 transition mt-2"
                   >
                     Logout
                   </button>
@@ -194,38 +165,8 @@ export default function Navbar() {
         )}
       </nav>
 
-      {/* Spacer div so content is not hidden behind fixed navbar */}
-      <div className="h-16" aria-hidden="true"></div>
-
-      {/* Dark mode CSS */}
-      <style jsx="true">{`
-        [data-theme="dark"] nav {
-          background-color: var(--color-bg-dark) !important;
-          box-shadow: 0 1px 4px rgba(255, 255, 255, 0.1);
-        }
-        [data-theme="dark"] nav a {
-          color: var(--color-text-dark);
-        }
-        [data-theme="dark"] nav a:hover,
-        [data-theme="dark"] nav a.active {
-          color: var(--color-primary);
-        }
-        [data-theme="dark"] button.bg-primary {
-          background-color: var(--color-primary);
-        }
-        [data-theme="dark"] button.bg-primary:hover {
-          background-color: var(--color-primary-hover);
-        }
-        [data-theme="dark"] button.text-white {
-          color: var(--color-text-dark);
-        }
-        [data-theme="dark"] .md:hidden {
-          background-color: var(--color-bg-dark);
-        }
-        [data-theme="dark"] .md:hidden button:hover {
-          background-color: #4338ca;
-        }
-      `}</style>
+      {/* Spacer */}
+      <div className="h-16"></div>
     </>
   );
 }
