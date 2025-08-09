@@ -9,7 +9,6 @@ export default function Recommendation() {
   useEffect(() => {
     const auth = getAuth();
 
-    // Listen for auth state changes
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         setUserEmail(user.email);
@@ -49,7 +48,7 @@ export default function Recommendation() {
   if (loading)
     return (
       <div
-        className="text-center py-20 text-lg text-gray-600 dark:text-gray-300"
+        className="text-center py-20 text-lg text-[var(--text-primary)] dark:text-[var(--text-dark)]"
         role="status"
         aria-live="polite"
       >
@@ -60,7 +59,7 @@ export default function Recommendation() {
   if (!userEmail)
     return (
       <div
-        className="text-center py-20 text-red-600 dark:text-red-400 text-lg"
+        className="text-center py-20 text-lg text-red-600 dark:text-red-400"
         role="alert"
       >
         Please log in to view your recommendations.
@@ -70,7 +69,7 @@ export default function Recommendation() {
   if (recommendations.length === 0)
     return (
       <div
-        className="text-center py-20 text-gray-500 dark:text-gray-400 text-lg"
+        className="text-center py-20 text-lg text-[var(--text-primary)] dark:text-[var(--text-dark)]"
         role="alert"
       >
         No recommendations found for your queries.
@@ -79,13 +78,13 @@ export default function Recommendation() {
 
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <h1 className="text-3xl font-extrabold mb-8 text-purple-700 dark:text-purple-400 text-center">
+      <h1 className="text-3xl font-extrabold mb-8 text-center text-[var(--primary)] dark:text-[var(--primary-dark)]">
         Recommendations on My Queries
       </h1>
 
-      <div className="overflow-x-auto rounded-lg shadow ring-1 ring-black ring-opacity-5">
+      <div className="overflow-x-auto rounded-lg shadow ring-1 ring-black ring-opacity-5 dark:ring-opacity-30">
         <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-          <thead className="bg-gray-50 dark:bg-gray-800">
+          <thead className="bg-[var(--bg-light)] dark:bg-[var(--bg-dark)]">
             <tr>
               {[
                 { label: "Title", align: "left" },
@@ -97,7 +96,7 @@ export default function Recommendation() {
                 <th
                   key={label}
                   scope="col"
-                  className={`px-6 py-3 text-${align} text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider`}
+                  className={`px-6 py-3 text-${align} text-xs font-semibold text-[var(--text-primary)] dark:text-[var(--text-dark)] uppercase tracking-wider`}
                 >
                   {label}
                 </th>
@@ -105,7 +104,7 @@ export default function Recommendation() {
             </tr>
           </thead>
 
-          <tbody className="bg-white dark:bg-gray-900 divide-y divide-gray-200 dark:divide-gray-700">
+          <tbody className="bg-white dark:bg-[var(--bg-dark)] divide-y divide-gray-200 dark:divide-gray-700">
             {recommendations.map((rec) => (
               <tr
                 key={rec._id}
@@ -113,26 +112,26 @@ export default function Recommendation() {
                 tabIndex={0}
                 aria-label={`Recommendation titled ${rec.title} for product ${rec.productName}`}
               >
-                <td className="px-6 py-4 whitespace-normal max-w-xs break-words text-gray-900 dark:text-gray-100 font-medium">
+                <td className="px-6 py-4 whitespace-normal max-w-xs break-words text-[var(--text-primary)] dark:text-[var(--text-dark)] font-medium">
                   {rec.title || "-"}
                 </td>
 
-                <td className="px-6 py-4 whitespace-normal max-w-xs break-words text-gray-700 dark:text-gray-300">
+                <td className="px-6 py-4 whitespace-normal max-w-xs break-words text-[var(--text-primary)] dark:text-[var(--text-dark)]">
                   {rec.productName || "-"}
                 </td>
 
-                <td className="px-6 py-4 whitespace-normal max-w-xs break-words text-gray-700 dark:text-gray-300">
+                <td className="px-6 py-4 whitespace-normal max-w-xs break-words text-[var(--text-primary)] dark:text-[var(--text-dark)]">
                   {rec.reason || "-"}
                 </td>
 
-                <td className="px-6 py-4 whitespace-normal max-w-xs break-words text-gray-700 dark:text-gray-300">
+                <td className="px-6 py-4 whitespace-normal max-w-xs break-words text-[var(--text-primary)] dark:text-[var(--text-dark)]">
                   <div className="font-semibold">{rec.recommenderName || "-"}</div>
-                  <div className="text-xs text-gray-500 dark:text-gray-400 break-all">
+                  <div className="text-xs text-[var(--text-primary)] dark:text-[var(--text-dark)] break-all">
                     {rec.recommenderEmail || "-"}
                   </div>
                 </td>
 
-                <td className="px-6 py-4 whitespace-nowrap text-gray-700 dark:text-gray-300 text-sm">
+                <td className="px-6 py-4 whitespace-nowrap text-[var(--text-primary)] dark:text-[var(--text-dark)] text-sm">
                   {rec.createdAt
                     ? new Date(rec.createdAt).toLocaleString()
                     : "N/A"}
@@ -142,6 +141,17 @@ export default function Recommendation() {
           </tbody>
         </table>
       </div>
+
+      <style jsx="true">{`
+        :root {
+          --primary: #4f46e5; /* Indigo 600 */
+          --primary-dark: #818cf8; /* Indigo 400 lighter */
+          --bg-light: #eef2ff; /* Indigo 50 */
+          --bg-dark: #312e81; /* Indigo 900 */
+          --text-primary: #3730a3; /* Indigo 700 */
+          --text-dark: #e0e7ff; /* Indigo 200 */
+        }
+      `}</style>
     </div>
   );
 }

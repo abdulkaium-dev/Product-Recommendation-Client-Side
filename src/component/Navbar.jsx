@@ -26,14 +26,15 @@ export default function Navbar() {
     deleteSpeed: 50,
   });
 
+  // Setting CSS variables dynamically on root for light mode
   useEffect(() => {
-    // Define CSS variables for colors (light and dark mode)
     const root = document.documentElement;
+    root.style.setProperty("--color-primary", "#4f46e5"); // Indigo 600
     root.style.setProperty("--color-bg-light", "#eef2ff"); // Indigo 50
     root.style.setProperty("--color-bg-dark", "#312e81"); // Indigo 900
     root.style.setProperty("--color-text-light", "#3730a3"); // Indigo 700
     root.style.setProperty("--color-text-dark", "#e0e7ff"); // Indigo 200
-    root.style.setProperty("--color-primary", "#4f46e5"); // Indigo 600
+    root.style.setProperty("--color-primary-hover", "#4338ca"); // Indigo 700-ish
   }, []);
 
   // Navigation routes
@@ -93,6 +94,7 @@ export default function Navbar() {
           backgroundColor: "var(--color-bg-light)",
           boxShadow: "0 1px 4px rgba(0, 0, 0, 0.1)",
         }}
+        data-theme={window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"}
       >
         {/* Navbar content wrapper with max width and padding */}
         <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-10">
@@ -111,7 +113,7 @@ export default function Navbar() {
                   <UserAvatar />
                   <button
                     onClick={handleLogout}
-                    className="bg-primary text-white px-4 py-1 rounded-md hover:bg-indigo-700 transition focus:outline-none focus:ring-2 focus:ring-primary"
+                    className="bg-primary text-white px-4 py-1 rounded-md hover:bg-primary-hover transition focus:outline-none focus:ring-2 focus:ring-primary"
                     aria-label="Logout"
                   >
                     Logout
@@ -124,7 +126,7 @@ export default function Navbar() {
             <div className="md:hidden">
               <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="p-2 rounded-md text-text-light hover:text-primary hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-primary transition"
+                className="p-2 rounded-md text-text-light hover:text-primary hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-primary transition dark:text-text-dark dark:hover:text-primary dark:hover:bg-gray-700"
                 aria-label="Toggle menu"
                 aria-expanded={isOpen}
               >
@@ -180,7 +182,7 @@ export default function Navbar() {
                       setIsOpen(false);
                       handleLogout();
                     }}
-                    className="bg-primary text-white px-4 py-1 rounded-md hover:bg-indigo-700 transition mt-2"
+                    className="bg-primary text-white px-4 py-1 rounded-md hover:bg-primary-hover transition mt-2"
                     aria-label="Logout"
                   >
                     Logout
@@ -197,30 +199,31 @@ export default function Navbar() {
 
       {/* Dark mode CSS */}
       <style jsx="true">{`
-        @media (prefers-color-scheme: dark) {
-          nav {
-            background-color: var(--color-bg-dark) !important;
-            box-shadow: 0 1px 4px rgba(255, 255, 255, 0.1);
-          }
-          nav a {
-            color: var(--color-text-dark);
-          }
-          nav a:hover,
-          nav a.active {
-            color: var(--color-primary);
-          }
-          button.bg-primary {
-            background-color: var(--color-primary);
-          }
-          button.bg-primary:hover {
-            background-color: #4338ca;
-          }
-          button.text-white {
-            color: #e0e7ff;
-          }
-          .md:hidden {
-            background-color: var(--color-bg-dark);
-          }
+        [data-theme="dark"] nav {
+          background-color: var(--color-bg-dark) !important;
+          box-shadow: 0 1px 4px rgba(255, 255, 255, 0.1);
+        }
+        [data-theme="dark"] nav a {
+          color: var(--color-text-dark);
+        }
+        [data-theme="dark"] nav a:hover,
+        [data-theme="dark"] nav a.active {
+          color: var(--color-primary);
+        }
+        [data-theme="dark"] button.bg-primary {
+          background-color: var(--color-primary);
+        }
+        [data-theme="dark"] button.bg-primary:hover {
+          background-color: var(--color-primary-hover);
+        }
+        [data-theme="dark"] button.text-white {
+          color: var(--color-text-dark);
+        }
+        [data-theme="dark"] .md:hidden {
+          background-color: var(--color-bg-dark);
+        }
+        [data-theme="dark"] .md:hidden button:hover {
+          background-color: #4338ca;
         }
       `}</style>
     </>

@@ -18,25 +18,19 @@ const QueryDetails = () => {
   const auth = getAuth();
   const user = auth.currentUser;
 
-  // Fetch product and recommendations for this query
   const fetchData = async () => {
     setLoading(true);
     try {
-      // Fetch product by ID
       const resQuery = await fetch(`https://server-code-three.vercel.app/products/${id}`);
       if (!resQuery.ok) throw new Error("Query not found");
       const query = await resQuery.json();
       setQueryData(query);
 
-      // Fetch recommendations for this query (all recommendations that have queryId == id)
       const resRecs = await fetch(
         `https://server-code-three.vercel.app/recommendations?queryId=${encodeURIComponent(id)}`
       );
-
       if (!resRecs.ok) throw new Error("Failed to fetch recommendations");
       const recs = await resRecs.json();
-
-      // Sort descending by createdAt date
       recs.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
       setRecommendations(recs);
     } catch (error) {
@@ -52,22 +46,18 @@ const QueryDetails = () => {
     fetchData();
   }, [id]);
 
-  // Handle form input change
   const handleChange = (e) => {
     setRecommendForm({ ...recommendForm, [e.target.name]: e.target.value });
   };
 
-  // Submit new recommendation
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     if (!user) {
       return Swal.fire("Unauthorized", "Please login to recommend.", "warning");
     }
     if (!queryData) {
       return Swal.fire("Error", "Query data is missing.", "error");
     }
-
     const recommendation = {
       title: recommendForm.title,
       productName: recommendForm.productName,
@@ -82,31 +72,15 @@ const QueryDetails = () => {
       recommenderName: user.displayName || user.email,
       createdAt: new Date().toISOString(),
     };
-
     try {
-      // POST recommendation
       const res = await fetch("https://server-code-three.vercel.app/recommendations", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(recommendation),
       });
-
       if (!res.ok) throw new Error("Failed to submit recommendation");
-
-      // Your backend automatically increments recommendationCount on POST
-      // So no need for separate PATCH request here
-
       Swal.fire("Success", "Recommendation submitted!", "success");
-
-      // Clear form
-      setRecommendForm({
-        title: "",
-        productName: "",
-        productImage: "",
-        reason: "",
-      });
-
-      // Refresh data
+      setRecommendForm({ title: "", productName: "", productImage: "", reason: "" });
       fetchData();
     } catch (error) {
       console.error(error);
@@ -115,16 +89,24 @@ const QueryDetails = () => {
   };
 
   if (loading)
-    return <div className="text-center py-20 text-lg font-semibold">Loading...</div>;
+    return (
+      <div className="text-center py-20 text-lg font-semibold text-indigo-700 dark:text-indigo-200">
+        Loading...
+      </div>
+    );
 
   if (!queryData)
-    return <div className="text-center py-20 text-red-600 font-semibold">Query not found.</div>;
+    return (
+      <div className="text-center py-20 font-semibold text-red-600">
+        Query not found.
+      </div>
+    );
 
   return (
-    <div className="max-w-3xl mx-auto p-6 bg-white rounded-lg shadow-md space-y-8">
+    <div className="max-w-3xl mx-auto p-6 bg-indigo-50 dark:bg-indigo-900 rounded-lg shadow-md space-y-8 text-indigo-700 dark:text-indigo-200">
       {/* Query Details */}
-      <h1 className="text-3xl font-bold text-purple-600">{queryData.queryTitle}</h1>
-      <div className="space-y-3 text-gray-700">
+      <h1 className="text-3xl font-bold text-indigo-600">{queryData.queryTitle}</h1>
+      <div className="space-y-3">
         <p>
           <strong>Product Name:</strong> {queryData.productName}
         </p>
@@ -143,7 +125,7 @@ const QueryDetails = () => {
       </div>
 
       {/* User Info */}
-      <div className="bg-gray-50 p-4 rounded-lg shadow-inner flex items-center gap-4">
+      <div className="bg-indigo-100 dark:bg-indigo-900 p-4 rounded-lg shadow-inner flex items-center gap-4">
         <img
           src={queryData.userPhoto || "/user-placeholder.png"}
           alt={queryData.userName || "User"}
@@ -152,13 +134,13 @@ const QueryDetails = () => {
         />
         <div>
           <p className="font-semibold">{queryData.userName || "Anonymous"}</p>
-          <p className="text-sm text-gray-500">{queryData.userEmail || "No email"}</p>
+          <p className="text-sm text-indigo-700 dark:text-indigo-200">{queryData.userEmail || "No email"}</p>
         </div>
       </div>
 
       {/* Recommendation Form */}
-      <section className="bg-gray-100 p-6 rounded-lg">
-        <h2 className="text-xl font-semibold mb-4 text-purple-700">Add a Recommendation</h2>
+      <section className="bg-indigo-100 dark:bg-indigo-900 p-6 rounded-lg">
+        <h2 className="text-xl font-semibold mb-4 text-indigo-600">Add a Recommendation</h2>
         <form onSubmit={handleSubmit} className="space-y-4">
           <input
             type="text"
@@ -196,7 +178,7 @@ const QueryDetails = () => {
           />
           <button
             type="submit"
-            className="btn bg-green-600 text-white hover:bg-green-700 w-full"
+            className="btn bg-indigo-600 hover:bg-indigo-700 text-white w-full"
           >
             Add Recommendation
           </button>
@@ -205,17 +187,17 @@ const QueryDetails = () => {
 
       {/* Recommendations List */}
       <section>
-        <h2 className="text-2xl font-semibold mb-4 text-purple-700">
+        <h2 className="text-2xl font-semibold mb-4 text-indigo-600">
           Recommendations ({recommendations.length})
         </h2>
         {recommendations.length === 0 ? (
-          <p className="text-gray-500">No recommendations yet.</p>
+          <p className="text-indigo-500 dark:text-indigo-400">No recommendations yet.</p>
         ) : (
           <ul className="space-y-6">
             {recommendations.map((rec) => (
               <li
                 key={rec._id}
-                className="border rounded-lg p-4 bg-white shadow-sm flex gap-4"
+                className="border rounded-lg p-4 bg-indigo-50 dark:bg-indigo-900 shadow-sm flex gap-4"
               >
                 {rec.productImage ? (
                   <img
@@ -225,15 +207,15 @@ const QueryDetails = () => {
                     onError={(e) => (e.target.src = "/placeholder.jpg")}
                   />
                 ) : (
-                  <div className="w-20 h-20 bg-gray-200 rounded flex items-center justify-center text-gray-400">
+                  <div className="w-20 h-20 bg-indigo-200 dark:bg-indigo-700 rounded flex items-center justify-center text-indigo-400 dark:text-indigo-500">
                     No Image
                   </div>
                 )}
-                <div className="flex-1">
+                <div className="flex-1 text-indigo-700 dark:text-indigo-200">
                   <h3 className="text-lg font-semibold">{rec.title}</h3>
                   <p className="text-sm font-medium">Product: {rec.productName}</p>
-                  <p className="text-gray-700 mt-1">{rec.reason}</p>
-                  <p className="text-xs text-gray-500 mt-2">
+                  <p className="mt-1">{rec.reason}</p>
+                  <p className="text-xs mt-2 text-indigo-500 dark:text-indigo-400">
                     Recommended by{" "}
                     <strong>{rec.recommenderName || rec.recommenderEmail}</strong> on{" "}
                     {new Date(rec.createdAt).toLocaleString()}
@@ -249,4 +231,3 @@ const QueryDetails = () => {
 };
 
 export default QueryDetails;
-  

@@ -26,7 +26,7 @@ const RecentQueries = () => {
   if (loading) {
     return (
       <p
-        className="text-center text-lg py-20 text-gray-600 dark:text-gray-300"
+        className="text-center text-lg py-20 text-text-primary dark:text-text-dark"
         aria-live="polite"
         role="status"
       >
@@ -38,7 +38,7 @@ const RecentQueries = () => {
   if (queries.length === 0) {
     return (
       <p
-        className="text-center text-lg py-20 text-gray-500 dark:text-gray-400"
+        className="text-center text-lg py-20 text-text-primary dark:text-text-dark"
         aria-live="polite"
         role="status"
       >
@@ -52,7 +52,7 @@ const RecentQueries = () => {
       className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12"
       aria-label="Recently added queries"
     >
-      <h2 className="text-4xl font-extrabold text-center text-purple-900 dark:text-purple-300 mb-12 tracking-wide">
+      <h2 className="text-4xl font-extrabold text-center text-text-primary dark:text-text-dark mb-12 tracking-wide">
         Recently Added Queries
       </h2>
 
@@ -93,17 +93,17 @@ const RecentQueries = () => {
 
             <div className="p-6 flex flex-col flex-grow">
               <h3
-                className="text-2xl font-semibold mb-2 truncate text-purple-900 dark:text-purple-100"
+                className="text-2xl font-semibold mb-2 truncate text-text-primary dark:text-text-dark"
                 title={query.queryTitle || "Untitled Query"}
               >
                 {query.queryTitle || "Untitled Query"}
               </h3>
 
-              <p className="text-purple-700 dark:text-purple-300 font-medium mb-1">
+              <p className="text-text-primary dark:text-text-dark font-medium mb-1">
                 Brand: {query.productBrand || "N/A"}
               </p>
 
-              <p className="text-purple-600 dark:text-purple-200 text-sm flex-grow mb-4 line-clamp-3">
+              <p className="text-text-primary dark:text-text-dark text-sm flex-grow mb-4 line-clamp-3">
                 {query.shortDescription
                   ? query.shortDescription
                   : query.productDescription
@@ -113,9 +113,9 @@ const RecentQueries = () => {
 
               <button
                 onClick={() => navigate(`/query/${query._id}`)}
-                className="bg-purple-600 dark:bg-purple-700 text-white font-semibold rounded-full px-6 py-2
-                  shadow-md hover:bg-purple-700 dark:hover:bg-purple-800
-                  transition self-start focus:outline-none focus:ring-4 focus:ring-purple-400"
+                className="bg-primary dark:bg-primary-dark text-white font-semibold rounded-full px-6 py-2
+                  shadow-md hover:bg-primary-hover dark:hover:bg-primary-dark-hover
+                  transition self-start focus:outline-none focus:ring-4 focus:ring-primary"
                 aria-label={`See more details about query: ${query.queryTitle || "Untitled Query"}`}
                 type="button"
               >
@@ -125,6 +125,37 @@ const RecentQueries = () => {
           </article>
         ))}
       </div>
+
+      {/* CSS variables and dark mode styles */}
+      <style jsx="true">{`
+        :root {
+          --color-primary: #4f46e5; /* Indigo 600 */
+          --color-primary-hover: #4338ca;
+          --color-primary-dark: #4338ca; /* slightly darker Indigo */
+          --color-primary-dark-hover: #3730a3;
+          --color-text-primary: #3730a3; /* Indigo 700 */
+          --color-text-dark: #e0e7ff; /* Indigo 200 */
+        }
+
+        .bg-primary {
+          background-color: var(--color-primary);
+        }
+        .hover\\:bg-primary-hover:hover {
+          background-color: var(--color-primary-hover);
+        }
+        .dark .bg-primary {
+          background-color: var(--color-primary-dark);
+        }
+        .dark .hover\\:bg-primary-hover:hover {
+          background-color: var(--color-primary-dark-hover);
+        }
+        .text-text-primary {
+          color: var(--color-text-primary);
+        }
+        .dark .text-text-primary {
+          color: var(--color-text-dark);
+        }
+      `}</style>
     </section>
   );
 };

@@ -40,8 +40,8 @@ export default function MyQueries() {
       text: `Do you want to delete the query: "${title}"?`,
       icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: "#7c3aed", // purple-600
-      cancelButtonColor: "#9ca3af", // gray-400
+      confirmButtonColor: "#4f46e5", // Indigo 600
+      cancelButtonColor: "#9ca3af", // gray-400 neutral
       confirmButtonText: "Yes, delete it!",
       cancelButtonText: "Cancel",
     });
@@ -50,9 +50,7 @@ export default function MyQueries() {
       try {
         const res = await fetch(
           `https://server-code-three.vercel.app/products/${id}`,
-          {
-            method: "DELETE",
-          }
+          { method: "DELETE" }
         );
         if (!res.ok) throw new Error("Delete request failed");
         const result = await res.json();
@@ -72,7 +70,7 @@ export default function MyQueries() {
   if (loading) {
     return (
       <p
-        className="text-center text-xl py-20 text-purple-700"
+        className="text-center text-xl py-20 text-[#4f46e5] dark:text-[#e0e7ff]"
         role="status"
         aria-live="polite"
       >
@@ -85,7 +83,7 @@ export default function MyQueries() {
     <div className="max-w-6xl mx-auto px-4 py-10">
       {/* Banner */}
       <div
-        className="bg-gradient-to-r from-purple-600 via-pink-500 to-red-500
+        className="bg-gradient-to-r from-[#4f46e5] via-[#818cf8] to-[#312e81]
                    text-white p-8 rounded-3xl shadow-lg mb-10
                    flex flex-col md:flex-row justify-between items-center gap-4"
       >
@@ -94,9 +92,9 @@ export default function MyQueries() {
         </h2>
         <button
           onClick={() => navigate("/add-query")}
-          className="bg-purple-700 hover:bg-purple-800 transition
+          className="bg-[#4f46e5] hover:bg-[#4338ca] transition
                      text-white px-6 py-3 rounded-xl font-semibold
-                     focus:outline-none focus:ring-4 focus:ring-purple-400 focus:ring-opacity-60"
+                     focus:outline-none focus:ring-4 focus:ring-[#818cf8] focus:ring-opacity-60"
           aria-label="Add new product query"
           type="button"
         >
@@ -117,10 +115,10 @@ export default function MyQueries() {
             className={`px-5 py-2 rounded-lg font-semibold transition
               ${
                 columns === num
-                  ? "bg-purple-600 text-white shadow-lg"
+                  ? "bg-[#4f46e5] text-white shadow-lg"
                   : "bg-gray-100 hover:bg-gray-200 text-gray-700"
               }
-              focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-opacity-50
+              focus:outline-none focus:ring-2 focus:ring-[#818cf8] focus:ring-opacity-50
             `}
             aria-pressed={columns === num}
             aria-label={`${num} column layout`}
@@ -134,14 +132,14 @@ export default function MyQueries() {
       {/* No queries */}
       {queries.length === 0 ? (
         <div className="text-center py-20 space-y-6">
-          <p className="text-xl text-gray-600">
+          <p className="text-xl text-[#3730a3] dark:text-[#e0e7ff]">
             You haven’t added any queries yet.
           </p>
           <button
             onClick={() => navigate("/add-query")}
-            className="bg-purple-600 text-white px-8 py-3 rounded-lg
-                       hover:bg-purple-700 hover:scale-105 transition transform
-                       focus:outline-none focus:ring-4 focus:ring-purple-400 focus:ring-opacity-50"
+            className="bg-[#4f46e5] text-white px-8 py-3 rounded-lg
+                       hover:bg-[#4338ca] hover:scale-105 transition transform
+                       focus:outline-none focus:ring-4 focus:ring-[#818cf8] focus:ring-opacity-50"
             aria-label="Add your first query"
             type="button"
           >
@@ -167,15 +165,15 @@ export default function MyQueries() {
               tabIndex={0}
               aria-labelledby={`query-title-${query._id}`}
               className="flex flex-col justify-between rounded-2xl shadow-lg
-                         bg-gradient-to-tr from-purple-100 via-purple-50 to-pink-50
-                         dark:from-purple-900 dark:via-purple-800 dark:to-pink-900
-                         hover:from-purple-200 hover:via-purple-100 hover:to-pink-100
-                         dark:hover:from-purple-700 dark:hover:via-purple-600 dark:hover:to-pink-800
+                         bg-gradient-to-tr from-[#eef2ff] via-[#eef2ff] to-pink-50
+                         dark:from-[#312e81] dark:via-[#312e81] dark:to-pink-900
+                         hover:from-indigo-200 hover:via-indigo-100 hover:to-pink-100
+                         dark:hover:from-indigo-700 dark:hover:via-indigo-600 dark:hover:to-pink-800
                          transition-transform duration-200 hover:scale-105
                          h-[420px]"
             >
               <div
-                className="w-full rounded-t-2xl overflow-hidden shadow-md bg-gray-100 dark:bg-gray-800"
+                className="w-full rounded-t-2xl overflow-hidden shadow-md bg-[#eef2ff] dark:bg-[#312e81]"
                 style={{ aspectRatio: "16 / 9" }}
               >
                 <img
@@ -196,17 +194,17 @@ export default function MyQueries() {
                 <div>
                   <h3
                     id={`query-title-${query._id}`}
-                    className="text-2xl font-semibold mb-2 truncate text-purple-900 dark:text-purple-100"
+                    className="text-2xl font-semibold mb-2 truncate text-[#3730a3] dark:text-[#e0e7ff]"
                     title={query.queryTitle || "Untitled Query"}
                   >
                     {query.queryTitle || "Untitled Query"}
                   </h3>
 
-                  <p className="text-purple-700 dark:text-purple-300 font-medium mb-1 truncate">
+                  <p className="text-[#4f46e5] dark:text-[#818cf8] font-medium mb-1 truncate">
                     Brand: {query.productBrand || "N/A"}
                   </p>
 
-                  <p className="text-purple-600 dark:text-purple-200 text-sm mb-1 truncate">
+                  <p className="text-[#818cf8] dark:text-[#4f46e5] text-sm mb-1 truncate">
                     Submitted:{" "}
                     {query.date
                       ? new Date(query.date).toLocaleString()
@@ -217,8 +215,8 @@ export default function MyQueries() {
                 <div className="flex justify-between mt-4 gap-3">
                   <button
                     onClick={() => navigate(`/query/${query._id}`)}
-                    className="bg-white text-black flex-1 px-3 py-2 rounded-md shadow-md hover:bg-amber-50 transition text-sm font-semibold
-                               focus:outline-none focus:ring-2 focus:ring-amber-400 focus:ring-opacity-50"
+                    className="bg-white text-black flex-1 px-3 py-2 rounded-md shadow-md hover:bg-indigo-50 transition text-sm font-semibold
+                               focus:outline-none focus:ring-2 focus:ring-[#818cf8] focus:ring-opacity-50"
                     aria-label={`View details of query: ${query.queryTitle}`}
                     type="button"
                   >
@@ -227,8 +225,8 @@ export default function MyQueries() {
 
                   <button
                     onClick={() => navigate(`/update-query/${query._id}`)}
-                    className="bg-white text-black flex-1 px-3 py-2 rounded-md hover:bg-amber-50 transition text-sm font-semibold
-                               focus:outline-none focus:ring-2 focus:ring-amber-400 focus:ring-opacity-50"
+                    className="bg-white text-black flex-1 px-3 py-2 rounded-md hover:bg-indigo-50 transition text-sm font-semibold
+                               focus:outline-none focus:ring-2 focus:ring-[#818cf8] focus:ring-opacity-50"
                     aria-label={`Update query: ${query.queryTitle}`}
                     type="button"
                   >
@@ -237,7 +235,7 @@ export default function MyQueries() {
 
                   <button
                     onClick={() => handleDelete(query._id, query.queryTitle)}
-                    className="bg-white text-red-600 flex-1 px-3 py-2 rounded-md hover:bg-red-50 transition text-sm font-semibold
+                    className="bg-[#4f46e5] text-white flex-1 px-3 py-2 rounded-md hover:bg-red-50 transition text-sm font-semibold
                                focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-opacity-50"
                     aria-label={`Delete query: ${query.queryTitle}`}
                     type="button"
