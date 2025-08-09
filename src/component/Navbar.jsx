@@ -1,5 +1,5 @@
-import React, { useState, useContext } from "react";
-import { Link, NavLink, useNavigate } from "react-router-dom";
+import React, { useState, useContext, useEffect } from "react";
+import { NavLink, useNavigate } from "react-router-dom";
 import { AuthContext } from "./AuthProvider";
 import { toast } from "react-toastify";
 import { useTypewriter, Cursor } from "react-simple-typewriter";
@@ -26,6 +26,17 @@ export default function Navbar() {
     deleteSpeed: 50,
   });
 
+  useEffect(() => {
+    // Define CSS variables for colors (light and dark mode)
+    const root = document.documentElement;
+    root.style.setProperty("--color-bg-light", "#eef2ff"); // Indigo 50
+    root.style.setProperty("--color-bg-dark", "#312e81"); // Indigo 900
+    root.style.setProperty("--color-text-light", "#3730a3"); // Indigo 700
+    root.style.setProperty("--color-text-dark", "#e0e7ff"); // Indigo 200
+    root.style.setProperty("--color-primary", "#4f46e5"); // Indigo 600
+  }, []);
+
+  // Navigation routes
   const commonItems = [
     { name: "Home", path: "/" },
     { name: "Queries", path: "/queries" },
@@ -39,6 +50,7 @@ export default function Navbar() {
   ];
 
   const guestItems = [...commonItems, { name: "Login", path: "/login" }];
+
   const menuItems = user ? loggedInItems : guestItems;
 
   const renderLinks = (isMobile = false) =>
@@ -48,9 +60,11 @@ export default function Navbar() {
         to={path}
         onClick={() => isMobile && setIsOpen(false)}
         className={({ isActive }) =>
-          isActive
-            ? "text-blue-600 font-semibold"
-            : "text-gray-700 hover:text-blue-600"
+          `transition-colors duration-200 px-3 py-2 rounded-md font-medium ${
+            isActive
+              ? "text-primary font-semibold"
+              : "text-text-light dark:text-text-dark hover:text-primary"
+          }`
         }
       >
         {name}
@@ -60,7 +74,7 @@ export default function Navbar() {
   const UserAvatar = () => (
     <div
       title={user?.displayName || "User"}
-      className="w-10 h-10 rounded-full overflow-hidden border-2 border-indigo-600 shrink-0"
+      className="w-10 h-10 rounded-full overflow-hidden border-2 border-primary shrink-0"
     >
       <img
         src={user?.photoURL || "/default-avatar.png"}
@@ -71,80 +85,144 @@ export default function Navbar() {
   );
 
   return (
-    <nav className="bg-gradient-to-br from-green-50 to-blue-200 shadow-md w-full overflow-x-hidden mb-5">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
-          {/* Logo & Title */}
-          <div className="flex items-center gap-2 text-xl md:text-2xl font-bold text-indigo-600 whitespace-nowrap overflow-hidden">
-            <img
-              src="data:image/png;base64,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"
-              alt="Logo"
-              className="h-8 w-8 shrink-0"
-            />
-            <span className="truncate">{text}</span>
-            <Cursor cursorStyle="|" />
-          </div>
+    <>
+      {/* Navbar background full width and sticky */}
+      <nav
+        className="fixed top-0 left-0 w-full z-50"
+        style={{
+          backgroundColor: "var(--color-bg-light)",
+          boxShadow: "0 1px 4px rgba(0, 0, 0, 0.1)",
+        }}
+      >
+        {/* Navbar content wrapper with max width and padding */}
+        <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-10">
+          <div className="flex justify-between items-center h-16">
+            {/* Logo & Title */}
+            <div className="flex items-center gap-3 text-2xl font-bold text-primary whitespace-nowrap overflow-hidden">
+              <span className="truncate">{text}</span>
+              <Cursor cursorStyle="|" />
+            </div>
 
-          {/* Desktop Menu */}
-          <div className="hidden md:flex gap-6 items-center">
-            {renderLinks()}
-            {user && (
-              <div className="flex items-center gap-4">
-                <UserAvatar />
-                <button
-                  onClick={handleLogout}
-                  className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
-                >
-                  Logout
-                </button>
-              </div>
-            )}
-          </div>
-
-          {/* Mobile Menu Button */}
-          <div className="md:hidden">
-            <button
-              onClick={() => setIsOpen(!isOpen)}
-              className="p-2 rounded-md text-gray-700 hover:text-indigo-600 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-              aria-label="Toggle menu"
-              aria-expanded={isOpen}
-            >
-              {isOpen ? (
-                <svg className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              ) : (
-                <svg className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
-                </svg>
+            {/* Desktop Menu */}
+            <div className="hidden md:flex gap-6 items-center">
+              {renderLinks()}
+              {user && (
+                <div className="flex items-center gap-4">
+                  <UserAvatar />
+                  <button
+                    onClick={handleLogout}
+                    className="bg-primary text-white px-4 py-1 rounded-md hover:bg-indigo-700 transition focus:outline-none focus:ring-2 focus:ring-primary"
+                    aria-label="Logout"
+                  >
+                    Logout
+                  </button>
+                </div>
               )}
-            </button>
-          </div>
-        </div>
-      </div>
+            </div>
 
-      {/* Mobile Menu */}
-      {isOpen && (
-        <div className="md:hidden px-4 pb-4">
-          <div className="flex flex-col space-y-3">
-            {renderLinks(true)}
-            {user && (
-              <>
-                <UserAvatar />
-                <button
-                  onClick={() => {
-                    setIsOpen(false);
-                    handleLogout();
-                  }}
-                  className="bg-red-500 text-white px-3 py-1 mt-2 rounded hover:bg-red-600"
-                >
-                  Logout
-                </button>
-              </>
-            )}
+            {/* Mobile Menu Toggle */}
+            <div className="md:hidden">
+              <button
+                onClick={() => setIsOpen(!isOpen)}
+                className="p-2 rounded-md text-text-light hover:text-primary hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-primary transition"
+                aria-label="Toggle menu"
+                aria-expanded={isOpen}
+              >
+                {isOpen ? (
+                  <svg
+                    className="h-6 w-6"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    aria-hidden="true"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M6 18L18 6M6 6l12 12"
+                    />
+                  </svg>
+                ) : (
+                  <svg
+                    className="h-6 w-6"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    aria-hidden="true"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M4 6h16M4 12h16M4 18h16"
+                    />
+                  </svg>
+                )}
+              </button>
+            </div>
           </div>
         </div>
-      )}
-    </nav>
+
+        {/* Mobile Menu */}
+        {isOpen && (
+          <div
+            className="md:hidden px-6 pb-4 border-t"
+            style={{ backgroundColor: "var(--color-bg-light)", borderColor: "#c7d2fe" }}
+          >
+            <nav className="flex flex-col space-y-4" aria-label="Mobile navigation">
+              {renderLinks(true)}
+              {user && (
+                <>
+                  <UserAvatar />
+                  <button
+                    onClick={() => {
+                      setIsOpen(false);
+                      handleLogout();
+                    }}
+                    className="bg-primary text-white px-4 py-1 rounded-md hover:bg-indigo-700 transition mt-2"
+                    aria-label="Logout"
+                  >
+                    Logout
+                  </button>
+                </>
+              )}
+            </nav>
+          </div>
+        )}
+      </nav>
+
+      {/* Spacer div so content is not hidden behind fixed navbar */}
+      <div className="h-16" aria-hidden="true"></div>
+
+      {/* Dark mode CSS */}
+      <style jsx="true">{`
+        @media (prefers-color-scheme: dark) {
+          nav {
+            background-color: var(--color-bg-dark) !important;
+            box-shadow: 0 1px 4px rgba(255, 255, 255, 0.1);
+          }
+          nav a {
+            color: var(--color-text-dark);
+          }
+          nav a:hover,
+          nav a.active {
+            color: var(--color-primary);
+          }
+          button.bg-primary {
+            background-color: var(--color-primary);
+          }
+          button.bg-primary:hover {
+            background-color: #4338ca;
+          }
+          button.text-white {
+            color: #e0e7ff;
+          }
+          .md:hidden {
+            background-color: var(--color-bg-dark);
+          }
+        }
+      `}</style>
+    </>
   );
 }

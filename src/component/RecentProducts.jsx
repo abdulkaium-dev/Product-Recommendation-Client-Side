@@ -20,15 +20,16 @@ const RecentQueries = () => {
         setQueries(sorted.slice(0, 6));
         setLoading(false);
       })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-        setLoading(false);
-      });
+      .catch(() => setLoading(false));
   }, []);
 
   if (loading) {
     return (
-      <p className="text-center text-xl py-20" aria-live="polite">
+      <p
+        className="text-center text-lg py-20 text-gray-600 dark:text-gray-300"
+        aria-live="polite"
+        role="status"
+      >
         Loading recent queries...
       </p>
     );
@@ -36,66 +37,95 @@ const RecentQueries = () => {
 
   if (queries.length === 0) {
     return (
-      <p className="text-center text-xl py-20 text-gray-500" aria-live="polite">
+      <p
+        className="text-center text-lg py-20 text-gray-500 dark:text-gray-400"
+        aria-live="polite"
+        role="status"
+      >
         No recent queries found.
       </p>
     );
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-10">
-      <h2 className="text-4xl font-extrabold text-center text-purple-900 mb-12 tracking-wide drop-shadow-lg">
+    <section
+      className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12"
+      aria-label="Recently added queries"
+    >
+      <h2 className="text-4xl font-extrabold text-center text-purple-900 dark:text-purple-300 mb-12 tracking-wide">
         Recently Added Queries
       </h2>
 
-      <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3" role="list">
+      <div
+        className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3"
+        role="list"
+        aria-label="Recent Queries List"
+      >
         {queries.map((query) => (
-          <div
+          <article
             key={query._id}
-            className="flex flex-col rounded-3xl shadow-lg hover:shadow-xl overflow-hidden
-                       bg-gradient-to-tr from-pink-500 via-purple-600 to-indigo-700
-                       text-white border-4 border-purple-800
-                       hover:from-purple-700 hover:via-pink-600 hover:to-red-600
-                       transition-transform duration-300 hover:scale-[1.03]"
             role="listitem"
+            className="flex flex-col rounded-2xl shadow-lg
+              bg-gradient-to-tr from-purple-100 via-purple-50 to-pink-50
+              dark:from-purple-900 dark:via-purple-800 dark:to-pink-900
+              hover:from-purple-200 hover:via-purple-100 hover:to-pink-100
+              dark:hover:from-purple-700 dark:hover:via-purple-600 dark:hover:to-pink-800
+              transition-transform duration-200 hover:scale-105
+              min-h-[460px]"
           >
             <img
               src={query.productImageUrl || "/placeholder.jpg"}
-              alt={query.queryTitle || query.productName || "Product image"}
-              className="h-48 w-full object-cover brightness-90 hover:brightness-110 transition duration-300"
-              onError={(e) => (e.target.src = "/placeholder.jpg")}
+              alt={
+                query.queryTitle
+                  ? `Image for query: ${query.queryTitle}`
+                  : query.productName
+                  ? `Image for product: ${query.productName}`
+                  : "Product image"
+              }
+              className="h-48 w-full object-cover rounded-t-2xl"
+              onError={(e) => {
+                e.currentTarget.onerror = null;
+                e.currentTarget.src = "/placeholder.jpg";
+              }}
+              loading="lazy"
+              decoding="async"
             />
+
             <div className="p-6 flex flex-col flex-grow">
-              <h3 className="text-2xl font-extrabold drop-shadow-md mb-2 truncate">
+              <h3
+                className="text-2xl font-semibold mb-2 truncate text-purple-900 dark:text-purple-100"
+                title={query.queryTitle || "Untitled Query"}
+              >
                 {query.queryTitle || "Untitled Query"}
               </h3>
-              <p className="text-purple-200 font-semibold mb-1">
+
+              <p className="text-purple-700 dark:text-purple-300 font-medium mb-1">
                 Brand: {query.productBrand || "N/A"}
               </p>
-              <p className="text-purple-300 text-sm flex-grow mb-4 line-clamp-3">
-                Submitted:{" "}
-                {query.date
-                  ? new Date(query.date).toLocaleDateString(undefined, {
-                      year: "numeric",
-                      month: "short",
-                      day: "numeric",
-                    })
-                  : "Unknown"}
+
+              <p className="text-purple-600 dark:text-purple-200 text-sm flex-grow mb-4 line-clamp-3">
+                {query.shortDescription
+                  ? query.shortDescription
+                  : query.productDescription
+                  ? query.productDescription.substring(0, 100) + "..."
+                  : "No description available."}
               </p>
 
               <button
                 onClick={() => navigate(`/query/${query._id}`)}
-                className="bg-white text-purple-700 font-semibold rounded-full px-4 py-2
-                           shadow-md hover:bg-purple-100 transition"
-                aria-label={`View details of query: ${query.queryTitle}`}
+                className="bg-purple-600 dark:bg-purple-700 text-white font-semibold rounded-full px-6 py-2
+                  shadow-md hover:bg-purple-700 dark:hover:bg-purple-800
+                  transition self-start focus:outline-none focus:ring-4 focus:ring-purple-400"
+                aria-label={`See more details about query: ${query.queryTitle || "Untitled Query"}`}
+                type="button"
               >
-                View Details
+                See More
               </button>
             </div>
-          </div>
+          </article>
         ))}
       </div>
-    </div>
+    </section>
   );
 };
 
