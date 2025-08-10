@@ -74,11 +74,19 @@ export default function UpdateQuery() {
   };
 
   if (loading)
-    return <p className="text-center py-20 text-xl text-gray-600">Loading...</p>;
+    return (
+      <p className="text-center py-20 text-xl text-gray-600">
+        Loading...
+      </p>
+    );
 
   return (
-    <div className="max-w-3xl mx-auto p-8 my-12 bg-white rounded-3xl shadow-xl border border-gray-200">
-      <h2 className="text-4xl font-extrabold text-purple-700 mb-10 text-center drop-shadow-md">
+    <div
+      className="max-w-3xl mx-auto p-6 sm:p-8 md:p-10 my-12
+                 bg-white rounded-3xl shadow-xl border border-gray-200
+                 sm:mx-6 md:mx-auto"
+    >
+      <h2 className="text-3xl sm:text-4xl font-extrabold text-indigo-700 mb-10 text-center drop-shadow-md">
         Update Your Query
       </h2>
 
@@ -94,8 +102,10 @@ export default function UpdateQuery() {
             value={queryData.productName}
             onChange={handleChange}
             required
-            className="w-full px-5 py-3 border border-gray-300 rounded-2xl shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition"
             placeholder="Enter product name"
+            className="w-full px-5 py-3 border border-gray-300 rounded-2xl shadow-sm
+                       focus:outline-none focus:ring-4 focus:ring-indigo-400 focus:border-transparent
+                       transition duration-300"
           />
         </div>
 
@@ -110,8 +120,10 @@ export default function UpdateQuery() {
             value={queryData.productBrand}
             onChange={handleChange}
             required
-            className="w-full px-5 py-3 border border-gray-300 rounded-2xl shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition"
             placeholder="Enter product brand"
+            className="w-full px-5 py-3 border border-gray-300 rounded-2xl shadow-sm
+                       focus:outline-none focus:ring-4 focus:ring-indigo-400 focus:border-transparent
+                       transition duration-300"
           />
         </div>
 
@@ -126,8 +138,10 @@ export default function UpdateQuery() {
             value={queryData.productImageUrl}
             onChange={handleChange}
             required
-            className="w-full px-5 py-3 border border-gray-300 rounded-2xl shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition"
             placeholder="Enter product image URL"
+            className="w-full px-5 py-3 border border-gray-300 rounded-2xl shadow-sm
+                       focus:outline-none focus:ring-4 focus:ring-indigo-400 focus:border-transparent
+                       transition duration-300"
           />
         </div>
 
@@ -142,8 +156,10 @@ export default function UpdateQuery() {
             value={queryData.queryTitle}
             onChange={handleChange}
             required
-            className="w-full px-5 py-3 border border-gray-300 rounded-2xl shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition"
             placeholder="Enter query title"
+            className="w-full px-5 py-3 border border-gray-300 rounded-2xl shadow-sm
+                       focus:outline-none focus:ring-4 focus:ring-indigo-400 focus:border-transparent
+                       transition duration-300"
           />
         </div>
 
@@ -158,15 +174,19 @@ export default function UpdateQuery() {
             onChange={handleChange}
             rows={5}
             required
-            className="w-full px-5 py-3 border border-gray-300 rounded-2xl shadow-sm resize-y focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition"
             placeholder="Explain why you want to boycott this product"
+            className="w-full px-5 py-3 border border-gray-300 rounded-2xl shadow-sm resize-y
+                       focus:outline-none focus:ring-4 focus:ring-indigo-400 focus:border-transparent
+                       transition duration-300"
           ></textarea>
         </div>
 
         {/* Submit Button */}
         <button
           type="submit"
-          className="w-full bg-gradient-to-r from-purple-600 via-pink-600 to-red-600 text-white font-bold py-4 rounded-3xl shadow-lg hover:scale-105 transform transition duration-300"
+          className="w-full bg-gradient-to-r from-indigo-700 via-indigo-600 to-indigo-800
+                     text-white font-bold py-4 rounded-3xl shadow-lg hover:scale-105
+                     transform transition duration-300"
         >
           Update Query
         </button>

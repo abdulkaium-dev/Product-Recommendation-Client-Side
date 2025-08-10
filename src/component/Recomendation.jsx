@@ -108,16 +108,16 @@ export default function Recommendation() {
           <thead className="bg-indigo-50 dark:bg-indigo-900">
             <tr>
               {[
-                { label: "Title", align: "left" },
-                { label: "Product Name", align: "left" },
-                { label: "Reason", align: "left" },
-                { label: "Recommender", align: "left" },
-                { label: "Recommended At", align: "left" },
-              ].map(({ label, align }) => (
+                { label: "Query Title", key: "queryTitle" },
+                { label: "Product Name", key: "productName" },
+                { label: "Boycotting Reason", key: "boycottingReason" },
+                { label: "Recommender Email", key: "recommenderEmail" },
+                { label: "Recommended At", key: "createdAt" },
+              ].map(({ label, key }) => (
                 <th
-                  key={label}
+                  key={key}
                   scope="col"
-                  className={`px-6 py-3 text-${align} text-xs font-semibold text-indigo-700 dark:text-indigo-300 uppercase tracking-wider select-none`}
+                  className="px-6 py-3 text-left text-xs font-semibold text-indigo-700 dark:text-indigo-300 uppercase tracking-wider select-none"
                 >
                   {label}
                 </th>
@@ -131,23 +131,22 @@ export default function Recommendation() {
                 key={rec._id}
                 className="hover:bg-indigo-100 dark:hover:bg-indigo-700 transition-colors focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-400"
                 tabIndex={0}
-                aria-label={`Recommendation titled ${rec.title} for product ${rec.productName}`}
+                aria-label={`Recommendation on query titled ${rec.queryDetails?.queryTitle || 'N/A'}`}
               >
                 <td className="px-6 py-4 max-w-xs break-words text-indigo-700 dark:text-indigo-300 font-medium whitespace-normal">
-                  {rec.title || "-"}
+                  {rec.queryDetails?.queryTitle || "-"}
                 </td>
 
                 <td className="px-6 py-4 max-w-xs break-words text-indigo-700 dark:text-indigo-300 whitespace-normal">
-                  {rec.productName || "-"}
+                  {rec.queryDetails?.productName || "-"}
                 </td>
 
                 <td className="px-6 py-4 max-w-xs break-words text-indigo-700 dark:text-indigo-300 whitespace-normal">
-                  {rec.reason || "-"}
+                  {rec.boycottingReason || "-"}
                 </td>
 
                 <td className="px-6 py-4 max-w-xs break-words text-indigo-700 dark:text-indigo-300 whitespace-normal">
-                  <div className="font-semibold">{rec.recommenderName || "-"}</div>
-                  <div className="text-xs break-all">{rec.recommenderEmail || "-"}</div>
+                  {rec.recommenderEmail || "-"}
                 </td>
 
                 <td className="px-6 py-4 whitespace-nowrap text-indigo-700 dark:text-indigo-300 text-sm">

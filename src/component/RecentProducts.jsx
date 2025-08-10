@@ -15,7 +15,7 @@ const RecentQueries = () => {
     fetch("https://server-code-three.vercel.app/products")
       .then((res) => res.json())
       .then((data) => {
-        // Sort by newest (ObjectId timestamp)
+        // Sort by newest
         const sorted = data.sort(
           (a, b) => getTimestampFromObjectId(b._id) - getTimestampFromObjectId(a._id)
         );
@@ -28,7 +28,7 @@ const RecentQueries = () => {
   if (loading) {
     return (
       <p
-        className="text-center text-lg py-20 text-indigo-700 dark:text-indigo-200"
+        className="text-center text-base sm:text-lg py-16 sm:py-20 text-indigo-700 dark:text-indigo-200"
         aria-live="polite"
         role="status"
       >
@@ -40,7 +40,7 @@ const RecentQueries = () => {
   if (queries.length === 0) {
     return (
       <p
-        className="text-center text-lg py-20 text-indigo-700 dark:text-indigo-200"
+        className="text-center text-base sm:text-lg py-16 sm:py-20 text-indigo-700 dark:text-indigo-200"
         aria-live="polite"
         role="status"
       >
@@ -51,15 +51,15 @@ const RecentQueries = () => {
 
   return (
     <section
-      className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12"
+      className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12"
       aria-label="Recently added queries"
     >
-      <h2 className="text-3xl sm:text-4xl font-extrabold text-center text-indigo-700 dark:text-indigo-200 mb-12 tracking-wide">
+      <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-center text-indigo-700 dark:text-indigo-200 mb-8 sm:mb-12 tracking-wide">
         Recently Added Queries
       </h2>
 
       <div
-        className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3"
+        className="grid gap-6 sm:gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"
         role="list"
         aria-label="Recent Queries List"
       >
@@ -69,12 +69,13 @@ const RecentQueries = () => {
             role="listitem"
             className="
               flex flex-col rounded-2xl shadow-lg
-              bg-gradient-to-tr from-indigo-100 via-indigo-100 to-pink-50
+              bg-gradient-to-tr from-indigo-50 via-indigo-50 to-pink-50
               dark:from-indigo-900 dark:via-indigo-900 dark:to-pink-900
               hover:from-indigo-200 hover:via-indigo-100 hover:to-pink-100
               dark:hover:from-indigo-700 dark:hover:via-indigo-600 dark:hover:to-pink-800
               transition-transform duration-200 hover:scale-105
-              min-h-[460px]
+              focus:outline-none focus:ring-4 focus:ring-indigo-400 dark:focus:ring-indigo-300
+              h-[460px] sm:h-[480px] w-full
             "
           >
             <img
@@ -86,7 +87,7 @@ const RecentQueries = () => {
                   ? `Image for product: ${query.productName}`
                   : "Product image"
               }
-              className="h-48 w-full object-cover rounded-t-2xl"
+              className="h-40 sm:h-48 lg:h-56 w-full object-cover rounded-t-2xl"
               onError={(e) => {
                 e.currentTarget.onerror = null;
                 e.currentTarget.src = "/placeholder.jpg";
@@ -97,17 +98,17 @@ const RecentQueries = () => {
 
             <div className="p-4 sm:p-6 flex flex-col flex-grow">
               <h3
-                className="text-xl sm:text-2xl font-semibold mb-2 truncate text-indigo-700 dark:text-indigo-200"
+                className="text-lg sm:text-xl lg:text-2xl font-semibold mb-2 truncate text-indigo-700 dark:text-indigo-200"
                 title={query.queryTitle || "Untitled Query"}
               >
                 {query.queryTitle || "Untitled Query"}
               </h3>
 
-              <p className="text-indigo-700 dark:text-indigo-200 font-medium mb-1">
+              <p className="text-indigo-700 dark:text-indigo-200 font-medium mb-1 text-sm sm:text-base">
                 Brand: {query.productBrand || "N/A"}
               </p>
 
-              <p className="text-indigo-700 dark:text-indigo-200 text-sm flex-grow mb-4 line-clamp-3">
+              <p className="text-indigo-700 dark:text-indigo-200 text-xs sm:text-sm lg:text-base flex-grow mb-4 line-clamp-3 sm:line-clamp-4">
                 {query.shortDescription
                   ? query.shortDescription
                   : query.productDescription
@@ -118,11 +119,11 @@ const RecentQueries = () => {
               <button
                 onClick={() => navigate(`/query/${query._id}`)}
                 className="
-                  bg-indigo-600 dark:bg-indigo-700 text-white font-semibold rounded-full px-6 py-2
+                  bg-indigo-600 dark:bg-indigo-700 text-white font-semibold rounded-full
+                  px-4 sm:px-6 py-1.5 sm:py-2 text-xs sm:text-sm lg:text-base
                   shadow-md hover:bg-indigo-700 dark:hover:bg-indigo-800
                   transition self-start
                   focus:outline-none focus:ring-4 focus:ring-indigo-500
-                  text-sm sm:text-base
                 "
                 aria-label={`See more details about query: ${query.queryTitle || "Untitled Query"}`}
                 type="button"

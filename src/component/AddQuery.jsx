@@ -14,7 +14,7 @@ export default function AddQuery() {
 
   const auth = getAuth();
   const user = auth.currentUser;
-  const navigate = useNavigate(); // 🔥 added
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormData((prev) => ({
@@ -28,9 +28,9 @@ export default function AddQuery() {
 
     if (!user) {
       Swal.fire({
-        title: 'Please log in to submit a query!',
-        icon: 'warning',
-        confirmButtonColor: '#f59e0b',
+        title: "Please log in to submit a query!",
+        icon: "warning",
+        confirmButtonColor: "#4f46e5", // indigo-600
       });
       return;
     }
@@ -58,7 +58,7 @@ export default function AddQuery() {
         Swal.fire({
           title: "Query Added Successfully!",
           icon: "success",
-          confirmButtonColor: "#22c55e",
+          confirmButtonColor: "#4f46e5",
         });
 
         setFormData({
@@ -69,7 +69,6 @@ export default function AddQuery() {
           boycottingReason: "",
         });
 
-        // 🔥 Redirect to /my-queries
         navigate("/my-queries");
       }
     } catch (error) {
@@ -84,81 +83,111 @@ export default function AddQuery() {
   };
 
   return (
-    <div className="max-w-5xl mx-auto mt-16 p-10 bg-gradient-to-r from-purple-400 via-pink-400 to-red-400 rounded-3xl shadow-2xl font-sans">
-      <h2 className="text-4xl font-extrabold text-white text-center mb-10 drop-shadow-lg">
+    <div
+      className="max-w-5xl mx-auto mt-12 px-4 sm:px-6 lg:px-8 py-10
+                 bg-gradient-to-r from-indigo-600 via-indigo-500 to-indigo-700
+                 rounded-3xl shadow-xl font-sans"
+    >
+      <h2 className="text-3xl sm:text-4xl font-extrabold text-white text-center mb-10 drop-shadow-lg">
         Add Product Query
       </h2>
-      <form onSubmit={handleAddTask} className="space-y-8 bg-white rounded-xl p-8 shadow-lg">
+
+      <form
+        onSubmit={handleAddTask}
+        className="space-y-8 bg-white rounded-3xl p-6 sm:p-8 shadow-lg"
+      >
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <label className="block">
-            <span className="text-gray-700 font-semibold mb-2 block text-lg">Product Name</span>
+            <span className="text-indigo-900 font-semibold mb-2 block text-base sm:text-lg">
+              Product Name
+            </span>
             <input
               type="text"
               name="productName"
               value={formData.productName}
               onChange={handleChange}
               placeholder="Enter product name"
-              className="w-full px-5 py-3 border-2 border-purple-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-purple-400 focus:border-transparent transition duration-300"
+              className="w-full px-4 py-3 border-2 border-gray-300 rounded-2xl
+                         focus:outline-none focus:ring-4 focus:ring-indigo-400 focus:border-transparent
+                         transition duration-300"
               required
             />
           </label>
 
           <label className="block">
-            <span className="text-gray-700 font-semibold mb-2 block text-lg">Product Brand</span>
+            <span className="text-indigo-900 font-semibold mb-2 block text-base sm:text-lg">
+              Product Brand
+            </span>
             <input
               type="text"
               name="productBrand"
               value={formData.productBrand}
               onChange={handleChange}
               placeholder="Enter product brand"
-              className="w-full px-5 py-3 border-2 border-pink-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-pink-400 focus:border-transparent transition duration-300"
+              className="w-full px-4 py-3 border-2 border-gray-300 rounded-2xl
+                         focus:outline-none focus:ring-4 focus:ring-indigo-400 focus:border-transparent
+                         transition duration-300"
               required
             />
           </label>
 
           <label className="block">
-            <span className="text-gray-700 font-semibold mb-2 block text-lg">Product Image URL</span>
+            <span className="text-indigo-900 font-semibold mb-2 block text-base sm:text-lg">
+              Product Image URL
+            </span>
             <input
               type="url"
               name="productImageUrl"
               value={formData.productImageUrl}
               onChange={handleChange}
               placeholder="Enter product image URL"
-              className="w-full px-5 py-3 border-2 border-red-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-red-400 focus:border-transparent transition duration-300"
+              className="w-full px-4 py-3 border-2 border-gray-300 rounded-2xl
+                         focus:outline-none focus:ring-4 focus:ring-indigo-400 focus:border-transparent
+                         transition duration-300"
               required
             />
           </label>
 
           <label className="block">
-            <span className="text-gray-700 font-semibold mb-2 block text-lg">Query Title</span>
+            <span className="text-indigo-900 font-semibold mb-2 block text-base sm:text-lg">
+              Query Title
+            </span>
             <input
               type="text"
               name="queryTitle"
               value={formData.queryTitle}
               onChange={handleChange}
               placeholder="Is there any better product that gives me the same quality?"
-              className="w-full px-5 py-3 border-2 border-indigo-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-indigo-400 focus:border-transparent transition duration-300"
+              className="w-full px-4 py-3 border-2 border-gray-300 rounded-2xl
+                         focus:outline-none focus:ring-4 focus:ring-indigo-400 focus:border-transparent
+                         transition duration-300"
               required
             />
           </label>
         </div>
 
         <label className="block">
-          <span className="text-gray-700 font-semibold mb-2 block text-lg">Boycotting Reason Details</span>
+          <span className="text-indigo-900 font-semibold mb-2 block text-base sm:text-lg">
+            Boycotting Reason Details
+          </span>
           <textarea
             name="boycottingReason"
             value={formData.boycottingReason}
             onChange={handleChange}
             placeholder="Explain why you don't want this product"
             rows={5}
-            className="w-full px-5 py-3 border-2 border-green-300 rounded-xl resize-y focus:outline-none focus:ring-4 focus:ring-green-400 focus:border-transparent transition duration-300"
+            className="w-full px-4 py-3 border-2 border-gray-300 rounded-2xl resize-y
+                       focus:outline-none focus:ring-4 focus:ring-indigo-400 focus:border-transparent
+                       transition duration-300"
             required
           />
         </label>
 
         <button
           type="submit"
-          className="w-full bg-gradient-to-r from-purple-600 via-pink-600 to-red-600 text-white font-bold py-4 rounded-2xl shadow-lg hover:scale-105 transform transition duration-300"
+          className="w-full bg-gradient-to-r from-indigo-700 via-indigo-600 to-indigo-800
+                     text-white font-bold py-4 rounded-3xl shadow-lg hover:scale-105
+                     transform transition duration-300"
         >
           Add Query
         </button>
