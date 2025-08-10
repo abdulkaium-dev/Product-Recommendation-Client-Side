@@ -3,6 +3,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { AuthContext } from "./AuthProvider";
 import { toast } from "react-toastify";
 import { useTypewriter, Cursor } from "react-simple-typewriter";
+import DarkModeToggle from "./DarkModeToggle";  // Import the toggle
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -51,9 +52,9 @@ export default function Navbar() {
         className={({ isActive }) =>
           `transition-colors duration-200 px-3 py-2 rounded-md font-medium ${
             isActive
-              ? "text-indigo-600 font-semibold"
-              : "text-indigo-700 dark:text-indigo-200 hover:text-indigo-600"
-          }`
+              ? "text-indigo-400 font-semibold"
+              : "text-indigo-700 dark:text-indigo-300 hover:text-indigo-600 dark:hover:text-indigo-400"
+          } ${isMobile ? "text-lg" : ""}`
         }
       >
         {name}
@@ -77,11 +78,11 @@ export default function Navbar() {
     <>
       {/* Navbar */}
       <nav className="fixed top-0 left-0 w-full z-50 bg-indigo-50 dark:bg-indigo-900 shadow-md">
-        <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-10">
+        <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             {/* Logo */}
             <div className="flex items-center gap-3 text-2xl font-bold text-indigo-600 dark:text-indigo-200 whitespace-nowrap overflow-hidden">
-              <span className="truncate">{text}</span>
+              <span>{text}</span>
               <Cursor cursorStyle="|" />
             </div>
 
@@ -99,12 +100,18 @@ export default function Navbar() {
                   </button>
                 </div>
               )}
+              {/* Dark Mode Toggle */}
+              <DarkModeToggle />
             </div>
 
             {/* Mobile Menu Toggle */}
-            <div className="md:hidden">
+            <div className="md:hidden flex items-center gap-2">
+              {/* Add Dark Mode toggle next to hamburger */}
+              <DarkModeToggle />
               <button
                 onClick={() => setIsOpen(!isOpen)}
+                aria-label="Toggle menu"
+                aria-expanded={isOpen}
                 className="p-2 rounded-md text-indigo-700 dark:text-indigo-200 hover:text-indigo-600 hover:bg-indigo-100 dark:hover:bg-indigo-800 focus:outline-none focus:ring-2 focus:ring-indigo-600 transition"
               >
                 {isOpen ? (
@@ -143,8 +150,10 @@ export default function Navbar() {
 
         {/* Mobile Menu */}
         {isOpen && (
-          <div className="md:hidden px-6 pb-4 border-t border-indigo-200 dark:border-indigo-700 bg-indigo-50 dark:bg-indigo-900">
-            <nav className="flex flex-col space-y-4">
+          <div
+            className="md:hidden px-6 pb-6 border-t border-indigo-200 dark:border-indigo-700 bg-indigo-50 dark:bg-indigo-900 transition-all duration-300 ease-in-out"
+          >
+            <nav className="flex flex-col space-y-5">
               {renderLinks(true)}
               {user && (
                 <>
@@ -154,7 +163,7 @@ export default function Navbar() {
                       setIsOpen(false);
                       handleLogout();
                     }}
-                    className="bg-indigo-600 text-white px-4 py-1 rounded-md hover:bg-indigo-700 transition mt-2"
+                    className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition mt-2 focus:outline-none focus:ring-2 focus:ring-indigo-600"
                   >
                     Logout
                   </button>
@@ -165,7 +174,7 @@ export default function Navbar() {
         )}
       </nav>
 
-      {/* Spacer */}
+      {/* Spacer to prevent content from hiding behind fixed navbar */}
       <div className="h-16"></div>
     </>
   );

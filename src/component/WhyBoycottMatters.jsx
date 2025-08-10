@@ -31,7 +31,7 @@ export default function WhyBoycottMatters() {
         <h2
           id="why-boycott-heading"
           className="text-4xl md:text-5xl font-extrabold
-            text-primary dark:text-primary-dark
+            text-indigo-600 dark:text-indigo-400
             mb-12 tracking-tight"
         >
           Why Boycott Matters?
@@ -49,12 +49,12 @@ export default function WhyBoycottMatters() {
                 className="bg-white dark:bg-indigo-900 p-8 rounded-3xl shadow-lg
                   hover:shadow-2xl transform hover:scale-105 transition-transform duration-300
                   flex flex-col items-center text-center
-                  focus:outline-none focus:ring-4 focus:ring-primary"
+                  focus:outline-none focus:ring-4 focus:ring-indigo-600 dark:focus:ring-indigo-400"
               >
                 <div
                   role="img"
                   aria-label={`${title} icon`}
-                  className="text-7xl mb-5 select-none text-primary dark:text-primary-dark"
+                  className="text-7xl mb-5 select-none text-indigo-600 dark:text-indigo-400"
                 >
                   {icon}
                 </div>
@@ -62,7 +62,7 @@ export default function WhyBoycottMatters() {
                 <h3
                   id={`${id}-title`}
                   className="text-2xl font-semibold mb-3
-                    text-primary dark:text-primary-dark"
+                    text-indigo-600 dark:text-indigo-400"
                 >
                   {title}
                 </h3>
@@ -75,33 +75,6 @@ export default function WhyBoycottMatters() {
           })}
         </div>
       </div>
-
-      {/* CSS Variables & dark mode */}
-      <style jsx="true">{`
-        :root {
-          --color-primary: #4f46e5; /* Indigo 600 */
-          --color-primary-dark: #818cf8; /* Indigo 400 lighter for dark mode */
-        }
-
-        .text-primary {
-          color: var(--color-primary);
-        }
-        .dark .text-primary {
-          color: var(--color-primary-dark);
-        }
-        .bg-primary {
-          background-color: var(--color-primary);
-        }
-        .dark .bg-primary {
-          background-color: var(--color-primary-dark);
-        }
-        .focus\\:ring-primary:focus {
-          --tw-ring-color: var(--color-primary);
-        }
-        .dark .focus\\:ring-primary:focus {
-          --tw-ring-color: var(--color-primary-dark);
-        }
-      `}</style>
     </section>
   );
 }

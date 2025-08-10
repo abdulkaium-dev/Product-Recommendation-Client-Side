@@ -48,11 +48,32 @@ export default function Recommendation() {
   if (loading)
     return (
       <div
-        className="text-center py-20 text-lg text-[var(--text-primary)] dark:text-[var(--text-dark)]"
+        className="flex justify-center items-center py-20"
         role="status"
         aria-live="polite"
       >
-        Loading recommendations...
+        <svg
+          className="animate-spin h-12 w-12 text-indigo-600 dark:text-indigo-400"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          aria-hidden="true"
+        >
+          <circle
+            className="opacity-25"
+            cx="12"
+            cy="12"
+            r="10"
+            stroke="currentColor"
+            strokeWidth="4"
+          ></circle>
+          <path
+            className="opacity-75"
+            fill="currentColor"
+            d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+          ></path>
+        </svg>
+        <span className="sr-only">Loading recommendations...</span>
       </div>
     );
 
@@ -69,7 +90,7 @@ export default function Recommendation() {
   if (recommendations.length === 0)
     return (
       <div
-        className="text-center py-20 text-lg text-[var(--text-primary)] dark:text-[var(--text-dark)]"
+        className="text-center py-20 text-lg text-indigo-700 dark:text-indigo-300"
         role="alert"
       >
         No recommendations found for your queries.
@@ -78,13 +99,13 @@ export default function Recommendation() {
 
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <h1 className="text-3xl font-extrabold mb-8 text-center text-[var(--primary)] dark:text-[var(--primary-dark)]">
+      <h1 className="text-3xl font-extrabold mb-8 text-center text-indigo-600 dark:text-indigo-400">
         Recommendations on My Queries
       </h1>
 
       <div className="overflow-x-auto rounded-lg shadow ring-1 ring-black ring-opacity-5 dark:ring-opacity-30">
         <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-          <thead className="bg-[var(--bg-light)] dark:bg-[var(--bg-dark)]">
+          <thead className="bg-indigo-50 dark:bg-indigo-900">
             <tr>
               {[
                 { label: "Title", align: "left" },
@@ -96,7 +117,7 @@ export default function Recommendation() {
                 <th
                   key={label}
                   scope="col"
-                  className={`px-6 py-3 text-${align} text-xs font-semibold text-[var(--text-primary)] dark:text-[var(--text-dark)] uppercase tracking-wider`}
+                  className={`px-6 py-3 text-${align} text-xs font-semibold text-indigo-700 dark:text-indigo-300 uppercase tracking-wider select-none`}
                 >
                   {label}
                 </th>
@@ -104,34 +125,32 @@ export default function Recommendation() {
             </tr>
           </thead>
 
-          <tbody className="bg-white dark:bg-[var(--bg-dark)] divide-y divide-gray-200 dark:divide-gray-700">
+          <tbody className="bg-white dark:bg-indigo-800 divide-y divide-gray-200 dark:divide-gray-700">
             {recommendations.map((rec) => (
               <tr
                 key={rec._id}
-                className="hover:bg-purple-50 dark:hover:bg-purple-900 transition-colors"
+                className="hover:bg-indigo-100 dark:hover:bg-indigo-700 transition-colors focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-400"
                 tabIndex={0}
                 aria-label={`Recommendation titled ${rec.title} for product ${rec.productName}`}
               >
-                <td className="px-6 py-4 whitespace-normal max-w-xs break-words text-[var(--text-primary)] dark:text-[var(--text-dark)] font-medium">
+                <td className="px-6 py-4 max-w-xs break-words text-indigo-700 dark:text-indigo-300 font-medium whitespace-normal">
                   {rec.title || "-"}
                 </td>
 
-                <td className="px-6 py-4 whitespace-normal max-w-xs break-words text-[var(--text-primary)] dark:text-[var(--text-dark)]">
+                <td className="px-6 py-4 max-w-xs break-words text-indigo-700 dark:text-indigo-300 whitespace-normal">
                   {rec.productName || "-"}
                 </td>
 
-                <td className="px-6 py-4 whitespace-normal max-w-xs break-words text-[var(--text-primary)] dark:text-[var(--text-dark)]">
+                <td className="px-6 py-4 max-w-xs break-words text-indigo-700 dark:text-indigo-300 whitespace-normal">
                   {rec.reason || "-"}
                 </td>
 
-                <td className="px-6 py-4 whitespace-normal max-w-xs break-words text-[var(--text-primary)] dark:text-[var(--text-dark)]">
+                <td className="px-6 py-4 max-w-xs break-words text-indigo-700 dark:text-indigo-300 whitespace-normal">
                   <div className="font-semibold">{rec.recommenderName || "-"}</div>
-                  <div className="text-xs text-[var(--text-primary)] dark:text-[var(--text-dark)] break-all">
-                    {rec.recommenderEmail || "-"}
-                  </div>
+                  <div className="text-xs break-all">{rec.recommenderEmail || "-"}</div>
                 </td>
 
-                <td className="px-6 py-4 whitespace-nowrap text-[var(--text-primary)] dark:text-[var(--text-dark)] text-sm">
+                <td className="px-6 py-4 whitespace-nowrap text-indigo-700 dark:text-indigo-300 text-sm">
                   {rec.createdAt
                     ? new Date(rec.createdAt).toLocaleString()
                     : "N/A"}
@@ -141,17 +160,6 @@ export default function Recommendation() {
           </tbody>
         </table>
       </div>
-
-      <style jsx="true">{`
-        :root {
-          --primary: #4f46e5; /* Indigo 600 */
-          --primary-dark: #818cf8; /* Indigo 400 lighter */
-          --bg-light: #eef2ff; /* Indigo 50 */
-          --bg-dark: #312e81; /* Indigo 900 */
-          --text-primary: #3730a3; /* Indigo 700 */
-          --text-dark: #e0e7ff; /* Indigo 200 */
-        }
-      `}</style>
     </div>
   );
 }

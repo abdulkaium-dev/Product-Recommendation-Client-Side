@@ -10,7 +10,7 @@ export default function Queries() {
   const [sortOrder, setSortOrder] = useState("");
   const navigate = useNavigate();
 
-  // Fetch all queries sorted descending by date
+  // Fetch queries from API
   const fetchQueries = async () => {
     setLoading(true);
     setError(null);
@@ -18,6 +18,11 @@ export default function Queries() {
       const res = await fetch("https://server-code-three.vercel.app/products");
       if (!res.ok) throw new Error("Failed to fetch data");
       const data = await res.json();
+
+      // Artificial delay for spinner visibility
+      await new Promise((r) => setTimeout(r, 1000));
+
+      // Sort by date descending by default
       const sortedByDate = data.sort(
         (a, b) => new Date(b.date || 0) - new Date(a.date || 0)
       );
@@ -34,13 +39,12 @@ export default function Queries() {
     fetchQueries();
   }, []);
 
-  // Filter + sort combined with useMemo for performance
+  // Filter and sort queries memoized
   const displayedQueries = useMemo(() => {
     let filtered = queries.filter((q) =>
       q.productName?.toLowerCase().includes(search.toLowerCase())
     );
-    filtered = [...filtered]; // clone to avoid in-place sort issues
-
+    filtered = [...filtered];
     if (sortOrder === "price-asc") {
       filtered.sort((a, b) => (a.price || 0) - (b.price || 0));
     } else if (sortOrder === "price-desc") {
@@ -51,20 +55,41 @@ export default function Queries() {
 
   if (loading) {
     return (
-      <p
-        className="text-center text-xl py-20 text-[var(--primary)]"
-        aria-live="polite"
+      <div
+        className="flex justify-center items-center py-20"
         role="status"
+        aria-live="polite"
       >
-        Loading queries...
-      </p>
+        <svg
+          className="animate-spin h-12 w-12 text-indigo-600 dark:text-indigo-400"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          aria-hidden="true"
+        >
+          <circle
+            className="opacity-25"
+            cx="12"
+            cy="12"
+            r="10"
+            stroke="currentColor"
+            strokeWidth="4"
+          ></circle>
+          <path
+            className="opacity-75"
+            fill="currentColor"
+            d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+          ></path>
+        </svg>
+        <span className="sr-only">Loading queries...</span>
+      </div>
     );
   }
 
   if (error) {
     return (
       <p
-        className="text-center text-xl py-20 text-red-600"
+        className="text-center text-xl py-20 text-red-600 dark:text-red-400"
         role="alert"
         aria-live="assertive"
       >
@@ -74,8 +99,8 @@ export default function Queries() {
   }
 
   return (
-    <main className="max-w-7xl mx-auto px-4 py-10">
-      <h1 className="text-4xl font-extrabold text-center mb-10 tracking-tight text-[var(--primary)]">
+    <main className="max-w-7xl mx-auto px-4 py-10 min-h-screen">
+      <h1 className="text-4xl font-extrabold text-center mb-10 tracking-tight text-indigo-600 dark:text-indigo-400">
         All Product Queries
       </h1>
 
@@ -86,8 +111,9 @@ export default function Queries() {
           placeholder="Search by product name..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="w-full sm:w-1/2 px-4 py-2 border-2 border-[var(--primary)] rounded-lg shadow-sm
-                     focus:outline-none focus:ring-2 focus:ring-[var(--primary)] transition"
+          className="w-full sm:w-1/2 px-4 py-2 border-2 border-indigo-600 rounded-lg shadow-sm
+                     focus:outline-none focus:ring-2 focus:ring-indigo-600 dark:border-indigo-400 dark:focus:ring-indigo-400
+                     text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800 transition"
           aria-label="Search queries by product name"
         />
       </div>
@@ -102,8 +128,8 @@ export default function Queries() {
           onClick={() => setSortOrder("price-asc")}
           className={`px-4 py-2 rounded-md font-semibold transition ${
             sortOrder === "price-asc"
-              ? "bg-[var(--primary)] text-white"
-              : "bg-[var(--bg-light)] hover:bg-[var(--primary-light)] text-[var(--primary)]"
+              ? "bg-indigo-600 text-white shadow"
+              : "bg-gray-100 dark:bg-gray-700 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-100 dark:hover:bg-indigo-700"
           }`}
           aria-pressed={sortOrder === "price-asc"}
           type="button"
@@ -114,8 +140,8 @@ export default function Queries() {
           onClick={() => setSortOrder("price-desc")}
           className={`px-4 py-2 rounded-md font-semibold transition ${
             sortOrder === "price-desc"
-              ? "bg-[var(--primary)] text-white"
-              : "bg-[var(--bg-light)] hover:bg-[var(--primary-light)] text-[var(--primary)]"
+              ? "bg-indigo-600 text-white shadow"
+              : "bg-gray-100 dark:bg-gray-700 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-100 dark:hover:bg-indigo-700"
           }`}
           aria-pressed={sortOrder === "price-desc"}
           type="button"
@@ -134,13 +160,11 @@ export default function Queries() {
           <button
             key={num}
             onClick={() => setLayout(num)}
-            className={`px-5 py-2 rounded-lg font-semibold transition
-              ${
-                layout === num
-                  ? "bg-[var(--primary)] text-white shadow-md"
-                  : "bg-[var(--bg-light)] hover:bg-[var(--primary-light)] text-[var(--primary)]"
-              }
-            `}
+            className={`px-5 py-2 rounded-lg font-semibold transition ${
+              layout === num
+                ? "bg-indigo-600 text-white shadow-md"
+                : "bg-gray-100 dark:bg-gray-700 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-100 dark:hover:bg-indigo-700"
+            }`}
             aria-pressed={layout === num}
             aria-label={`${num} column layout`}
             type="button"
@@ -153,7 +177,7 @@ export default function Queries() {
       {/* No Queries Found */}
       {displayedQueries.length === 0 ? (
         <p
-          className="text-center text-[var(--text-primary)] mt-10 text-lg"
+          className="text-center text-indigo-700 dark:text-indigo-300 mt-10 text-lg"
           aria-live="polite"
           role="alert"
         >
@@ -165,8 +189,8 @@ export default function Queries() {
             layout === 1
               ? "grid-cols-1"
               : layout === 2
-              ? "grid-cols-1 sm:grid-cols-2"
-              : "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"
+              ? "grid-cols-1 sm:grid-cols-2 md:grid-cols-2"
+              : "grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3"
           }`}
           aria-label="Product queries"
         >
@@ -174,12 +198,13 @@ export default function Queries() {
             <article
               key={query._id}
               className="relative flex flex-col justify-between rounded-2xl shadow-lg
-                         bg-gradient-to-tr from-[var(--bg-light)] via-purple-50 to-pink-50
-                         dark:from-[var(--bg-dark)] dark:via-purple-900 dark:to-pink-900
-                         hover:from-purple-200 hover:via-purple-100 hover:to-pink-100
-                         dark:hover:from-purple-700 dark:hover:via-purple-600 dark:hover:to-pink-800
+                         bg-gradient-to-tr from-indigo-50 via-indigo-50 to-pink-50
+                         dark:from-indigo-900 dark:via-indigo-900 dark:to-pink-900
+                         hover:from-indigo-200 hover:via-indigo-100 hover:to-pink-100
+                         dark:hover:from-indigo-700 dark:hover:via-indigo-600 dark:hover:to-pink-800
                          transition-transform duration-200 hover:scale-105
-                         h-[480px] w-full max-w-full"
+                         h-[480px] w-full max-w-full
+                         focus:outline-none focus:ring-4 focus:ring-indigo-400 dark:focus:ring-indigo-300"
               tabIndex={0}
               aria-labelledby={`query-title-${query._id}`}
               role="article"
@@ -205,36 +230,36 @@ export default function Queries() {
                 <div>
                   <h2
                     id={`query-title-${query._id}`}
-                    className="text-2xl font-semibold mb-2 truncate text-[var(--text-primary)] dark:text-[var(--text-dark)]"
+                    className="text-2xl font-semibold mb-2 truncate text-indigo-700 dark:text-indigo-300"
                     title={query.queryTitle || "Untitled Query"}
                   >
                     {query.queryTitle || "Untitled Query"}
                   </h2>
 
-                  <p className="font-medium mb-1 truncate text-[var(--text-primary)] dark:text-[var(--text-dark)]">
+                  <p className="font-medium mb-1 truncate text-indigo-700 dark:text-indigo-300">
                     Brand: {query.productBrand || "N/A"}
                   </p>
 
-                  <p className="text-sm mb-1 truncate text-[var(--text-primary)] dark:text-[var(--text-dark)]">
+                  <p className="text-sm mb-1 truncate text-indigo-700 dark:text-indigo-300">
                     Product: {query.productName || "Unknown"}
                   </p>
 
-                  <p className="text-sm mb-1 font-semibold text-[var(--text-primary)] dark:text-[var(--text-dark)]">
+                  <p className="text-sm mb-1 font-semibold text-indigo-700 dark:text-indigo-300">
                     Price: ${query.price?.toFixed(2) || "0.00"}
                   </p>
 
-                  <p className="text-sm mb-4 text-[var(--text-primary)] dark:text-[var(--text-dark)]">
+                  <p className="text-sm mb-4 text-indigo-700 dark:text-indigo-300">
                     Recommendations: {query.recommendationCount || 0}
                   </p>
 
-                  <p className="text-xs mb-6 truncate text-[var(--text-primary)] dark:text-[var(--text-dark)]">
+                  <p className="text-xs mb-6 truncate text-indigo-700 dark:text-indigo-300">
                     Submitted by: {query.userName || "Anonymous"}
                   </p>
                 </div>
 
                 <button
                   onClick={() => navigate(`/query/${query._id}`)}
-                  className="bg-[var(--primary)] dark:bg-indigo-700 text-white font-semibold rounded-full px-6 py-2
+                  className="bg-indigo-600 dark:bg-indigo-700 text-white font-semibold rounded-full px-6 py-2
                              shadow-md hover:bg-indigo-700 dark:hover:bg-indigo-800
                              transition self-start focus:outline-none focus:ring-4 focus:ring-indigo-400"
                   aria-label={`Recommend for query titled: ${query.queryTitle}`}
@@ -246,7 +271,7 @@ export default function Queries() {
 
               <time
                 dateTime={query.date || ""}
-                className="absolute top-3 right-3 bg-white text-black dark:text-white text-xs font-semibold px-3 py-1 rounded-full shadow select-none"
+                className="absolute top-3 right-3 bg-white text-black dark:bg-gray-800 dark:text-white text-xs font-semibold px-3 py-1 rounded-full shadow select-none"
               >
                 📅 {query.date ? new Date(query.date).toLocaleDateString() : "Unknown"}
               </time>
@@ -254,17 +279,6 @@ export default function Queries() {
           ))}
         </section>
       )}
-
-      <style jsx="true">{`
-        :root {
-          --primary: #4f46e5; /* Indigo 600 */
-          --primary-light: #818cf8; /* Indigo 400 lighter */
-          --bg-light: #eef2ff; /* Indigo 50 */
-          --bg-dark: #312e81; /* Indigo 900 */
-          --text-primary: #3730a3; /* Indigo 700 */
-          --text-dark: #e0e7ff; /* Indigo 200 */
-        }
-      `}</style>
     </main>
   );
 }

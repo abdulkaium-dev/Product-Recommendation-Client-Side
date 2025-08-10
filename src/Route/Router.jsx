@@ -43,7 +43,6 @@ const router = createBrowserRouter([
       {
         path: "queries",
         Component: Queries,
-        hydrateFallbackElement: loadingFallback,
       },
       {
         path: "query/:id",
@@ -59,7 +58,6 @@ const router = createBrowserRouter([
             <MyQueriesPage />
           </PrivateRouter>
         ),
-        hydrateFallbackElement: loadingFallback,
       },
       {
         path: "add-query",
@@ -86,7 +84,6 @@ const router = createBrowserRouter([
             <MyRecommendation />
           </PrivateRouter>
         ),
-        hydrateFallbackElement: loadingFallback,
       },
       {
         path: "recommended",
@@ -95,7 +92,6 @@ const router = createBrowserRouter([
             <Recommendation />
           </PrivateRouter>
         ),
-        hydrateFallbackElement: loadingFallback,
       },
     ],
   },

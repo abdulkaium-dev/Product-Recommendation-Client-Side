@@ -3,9 +3,10 @@ import Navbar from "../component/Navbar";
 import { Outlet } from "react-router";
 import Footer from "../component/Footer";
 
+
 const Root = () => {
   return (
-    <div className="flex flex-col min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div>
       <header role="banner">
         <Navbar />
       </header>
