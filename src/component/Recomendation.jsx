@@ -8,16 +8,13 @@ export default function Recommendation() {
 
   useEffect(() => {
     const auth = getAuth();
-
     const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        setUserEmail(user.email);
-      } else {
+      if (user) setUserEmail(user.email);
+      else {
         setUserEmail(null);
         setLoading(false);
       }
     });
-
     return () => unsubscribe();
   }, []);
 
@@ -25,17 +22,18 @@ export default function Recommendation() {
     if (!userEmail) return;
 
     async function fetchRecommendations() {
+      setLoading(true);
       try {
         const res = await fetch(
           `https://server-code-three.vercel.app/myqueries/recommendations?email=${encodeURIComponent(
             userEmail
           )}`
         );
-        if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+        if (!res.ok) throw new Error("Failed to fetch recommendations");
         const data = await res.json();
         setRecommendations(data);
-      } catch (error) {
-        console.error("Failed to fetch recommendations:", error);
+      } catch (err) {
+        console.error(err);
         setRecommendations([]);
       } finally {
         setLoading(false);
@@ -47,17 +45,12 @@ export default function Recommendation() {
 
   if (loading)
     return (
-      <div
-        className="flex justify-center items-center py-20"
-        role="status"
-        aria-live="polite"
-      >
+      <div className="flex justify-center items-center py-20">
         <svg
           className="animate-spin h-12 w-12 text-indigo-600 dark:text-indigo-400"
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
           viewBox="0 0 24 24"
-          aria-hidden="true"
         >
           <circle
             className="opacity-25"
@@ -66,46 +59,39 @@ export default function Recommendation() {
             r="10"
             stroke="currentColor"
             strokeWidth="4"
-          ></circle>
+          />
           <path
             className="opacity-75"
             fill="currentColor"
             d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
-          ></path>
+          />
         </svg>
-        <span className="sr-only">Loading recommendations...</span>
       </div>
     );
 
   if (!userEmail)
     return (
-      <div
-        className="text-center py-20 text-lg text-red-600 dark:text-red-400"
-        role="alert"
-      >
+      <div className="text-center py-20 text-red-600">
         Please log in to view your recommendations.
       </div>
     );
 
   if (recommendations.length === 0)
     return (
-      <div
-        className="text-center py-20 text-lg text-indigo-700 dark:text-indigo-300"
-        role="alert"
-      >
+      <div className="text-center py-20 text-indigo-700">
         No recommendations found for your queries.
       </div>
     );
 
   return (
-    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <h1 className="text-3xl font-extrabold mb-8 text-center text-indigo-600 dark:text-indigo-400">
+    <div className="max-w-6xl mx-auto px-4 py-8">
+      <h1 className="text-3xl font-bold text-center text-indigo-600 mb-6">
         Recommendations on My Queries
       </h1>
 
-      <div className="overflow-x-auto rounded-lg shadow ring-1 ring-black ring-opacity-5 dark:ring-opacity-30">
-        <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-          <thead className="bg-indigo-50 dark:bg-indigo-900">
+      <div className="overflow-x-auto">
+        <table className="min-w-full divide-y divide-gray-200">
+          <thead className="bg-indigo-50">
             <tr>
               {[
                 { label: "Query Title", key: "queryTitle" },
@@ -116,8 +102,7 @@ export default function Recommendation() {
               ].map(({ label, key }) => (
                 <th
                   key={key}
-                  scope="col"
-                  className="px-6 py-3 text-left text-xs font-semibold text-indigo-700 dark:text-indigo-300 uppercase tracking-wider select-none"
+                  className="px-6 py-3 text-left text-xs font-semibold text-indigo-700 uppercase"
                 >
                   {label}
                 </th>
@@ -125,34 +110,15 @@ export default function Recommendation() {
             </tr>
           </thead>
 
-          <tbody className="bg-white dark:bg-indigo-800 divide-y divide-gray-200 dark:divide-gray-700">
+          <tbody className="bg-white divide-y divide-gray-200">
             {recommendations.map((rec) => (
-              <tr
-                key={rec._id}
-                className="hover:bg-indigo-100 dark:hover:bg-indigo-700 transition-colors focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-400"
-                tabIndex={0}
-                aria-label={`Recommendation on query titled ${rec.queryDetails?.queryTitle || 'N/A'}`}
-              >
-                <td className="px-6 py-4 max-w-xs break-words text-indigo-700 dark:text-indigo-300 font-medium whitespace-normal">
-                  {rec.queryDetails?.queryTitle || "-"}
-                </td>
-
-                <td className="px-6 py-4 max-w-xs break-words text-indigo-700 dark:text-indigo-300 whitespace-normal">
-                  {rec.queryDetails?.productName || "-"}
-                </td>
-
-                <td className="px-6 py-4 max-w-xs break-words text-indigo-700 dark:text-indigo-300 whitespace-normal">
-                  {rec.boycottingReason || "-"}
-                </td>
-
-                <td className="px-6 py-4 max-w-xs break-words text-indigo-700 dark:text-indigo-300 whitespace-normal">
-                  {rec.recommenderEmail || "-"}
-                </td>
-
-                <td className="px-6 py-4 whitespace-nowrap text-indigo-700 dark:text-indigo-300 text-sm">
-                  {rec.createdAt
-                    ? new Date(rec.createdAt).toLocaleString()
-                    : "N/A"}
+              <tr key={rec._id} className="hover:bg-indigo-100">
+                <td className="px-6 py-4">{rec.queryDetails?.queryTitle || "-"}</td>
+                <td className="px-6 py-4">{rec.queryDetails?.productName || "-"}</td>
+                <td className="px-6 py-4">{rec.boycottingReason || "-"}</td>
+                <td className="px-6 py-4">{rec.recommenderEmail || "-"}</td>
+                <td className="px-6 py-4">
+                  {rec.createdAt ? new Date(rec.createdAt).toLocaleString() : "-"}
                 </td>
               </tr>
             ))}
