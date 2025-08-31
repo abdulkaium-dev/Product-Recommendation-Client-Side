@@ -47,7 +47,7 @@ const Home = () => {
   if (loading) return <Loader />;
 
   return (
-    <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <main className="">
       {/* Add vertical spacing between sections */}
       <section className="mb-16">
         <HomeSlider />
@@ -61,7 +61,7 @@ const Home = () => {
         <WhyBoycottMatters />
       </section>
 
-      <section className="mb-16">
+      <section>
         <Testimonials />
       </section>
     </main>
