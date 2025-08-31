@@ -6,7 +6,7 @@ This project is a Product Recommendation platform where users can post queries a
 The system includes features like user registration and login (with Firebase Authentication), adding/updating/deleting queries and recommendations, viewing recommendations, and searching queries by product name.
 
 ## Live URL
-[https://your-live-site-url.com](https://your-live-site-url.com)  
+[https://zesty-strudel-2c6569.netlify.app/](https://your-live-site-url.com)  
 *(Replace with your actual deployed URL)*
 
 ## Key Features
@@ -47,8 +47,8 @@ The system includes features like user registration and login (with Firebase Aut
 ## How to run locally
 
 1. Clone the repositories:
-   - Client: `git clone https://github.com/yourusername/product-recommendation-client.git`
-   - Server: `git clone https://github.com/yourusername/product-recommendation-server.git`
+   - Client: `https://github.com/abdulkaium-dev/Product-Recommendation-Client-Side`
+   - Server: `https://github.com/abdulkaium-dev/Product-Recommendation-Server-Side`
 
 2. Create `.env` files in both client and server directories with the following variables:
 
